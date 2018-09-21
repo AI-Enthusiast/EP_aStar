@@ -1,9 +1,10 @@
-# AStar.py created for solving the 8-puzzle problem, implemented in Eight_Puzzle.py
+# AStar.py created for solving the 8-puzzle problem and TicTacToe
 # DateCreated: 9/7/18
 # Author: Cormac Dacker (cxd289)
 from typing import List
 
-from Code.SlavesToTheMain import EightPuzzle as ep
+from SlavesToTheMain import EightPuzzle as ep
+from SlavesToTheMain import TicTacToe as ttt
 
 
 def error(errorMessage):
@@ -11,12 +12,14 @@ def error(errorMessage):
 
 
 class AStar:
-
+    # Constructor
+    # Params: puzzle(the puzzle being solved), maxNodes(the maximum depth)
     def __init__(self, puzzle, maxNodes=31):
         self.MaxNodes = maxNodes
         self.aStar(puzzle)  # print aStar solution
 
-    # the heuristic function
+    # The heuristic function
+    # F(x) = h1(x) + h2(x) + Current_Depth(x)
     def f(self, puzzle):
         return ep.h1(puzzle) + ep.h2(puzzle) + puzzle.Depth
 
@@ -39,18 +42,19 @@ class AStar:
         else:  # work toward the goal
             open.append(puzzle)  # add the starting puzzle to open
             while open is not None:  # while there are still nodes to expand in open
-                branch = self.chooseBranch(open, closed)  # type: ep.EightPuzzle #choose a branch from open
+                branch = self.chooseBranch(open,
+                                           closed)  # type: ep.EightPuzzle or ttt.TicTacToe #choose a branch from open
                 closed[branch.State] = branch  # add the chosen branch to the closed table
                 open.remove(branch)  # remove the branch from open
-                newBranches = ep.move(branch, 0)  # type: List[ep.EightPuzzle] # get childern of that branch
+                newBranches = ep.move(branch,
+                                      0)  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
                 for stem in range(len(newBranches)):  # for each expantion of the branch
                     if ep.isGoal(newBranches[stem].State):  # if it's the goal
-                        newBranches[stem].generateSolutionPath([])
-                        goal = True
+                        newBranches[stem].generateSolutionPath([])  # generate solution
+                        goal = True  # we are done
                         break  # goal has been achieved
+                    # if not in closed & not exceeded depth
                     if newBranches[stem].State not in closed and newBranches[stem].Depth < self.MaxNodes:
-                        # if not in closed
-                        # if its not exceeded depth
                         open.append(newBranches[stem])  # add stem to open nodes
                 if goal:
                     break

@@ -14,14 +14,6 @@ def error(errorMessage):
     print(">ERROR:\t" + str(errorMessage))
 
 
-# Checks if the goal has been met
-def isGoal(puzzle):
-    for i in range(len(puzzle)):  # itterates through State and goal double checking they match
-        if goal[i] != puzzle[i]:  # if they dont match
-            return False
-    return True
-
-
 class EightPuzzle:
     State = ...  # type: str
 
@@ -100,14 +92,15 @@ class EightPuzzle:
         print(out)
 
     # Creates the path to the parent from the current node (this assumes that node is the goal)
+    # Recursive
     def generateSolutionPath(self, path=None):
         if path is None:
             path = []
-        if self.Parent is None: # your at the top
-            path.reverse() # reverse order as they are added in
+        if self.Parent is None:  # your at the top
+            path.reverse()  # reverse order as they are added in
             print("Number of moves:", len(path))
             print(' --> '.join(path))
-        else: # there are still parent nodes
+        else:  # there are still parent nodes
             path.append(self.Parent[0])
             return self.Parent[1].generateSolutionPath(path)  # recursively self call for path
 
@@ -132,6 +125,14 @@ class EightPuzzle:
             self.State = str(''.join(state))
         else:
             return EightPuzzle(state=str(''.join(state)), parent=(direction, self), b=y, depth=self.Depth + 1)
+
+
+# Checks if the goal has been met
+def isGoal(puzzle):
+    for i in range(len(puzzle)):  # itterates through State and goal double checking they match
+        if goal[i] != puzzle[i]:  # if they dont match
+            return False
+    return True
 
 
 # Moves the tile up, down, left, right

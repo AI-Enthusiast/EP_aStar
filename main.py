@@ -3,8 +3,9 @@ import csv
 import os
 import timeit
 
-from Code.SlavesToTheMain import AStar
-from Code.SlavesToTheMain import EightPuzzle as ep
+from SlavesToTheMain import AStar
+from SlavesToTheMain import Beam
+from SlavesToTheMain import EightPuzzle as ep
 
 
 # Reports an error
@@ -28,7 +29,7 @@ def readFile():
         csvfile.close()
         return out[0]
 
-
+#TODO finish
 # main's main ;)
 if __name__ == "__main__":
     newGame = True
@@ -36,14 +37,15 @@ if __name__ == "__main__":
 
     print('> Welcome')
 
-    # Commandline interface
+    # Commandline interface #TODO make these commands do something
     parser = argparse.ArgumentParser(description="Initialize a game and play or watch algorithms solve it")
     parser.add_argument("-setState", help="e.g. 'b12 345 678' or 'b12345678' or 'random'", dest="state", type=str,
-                        default="random")
+                        default="random", required=True)
     parser.add_argument("-rand", help="Sets number of random moves to create the random board", dest='random', type=int)
     parser.add_argument("-aStar", help="Solves the puzzle A* style", dest="a_star", type=bool)
     parser.add_argument("-beam", help="Solves the puzzle Beam style", dest="beam", type=bool)
     parser.add_argument("-print", help="Prints the current state of the puzzle", dest="print", type=bool)
+    parser.add_argument("-maxNodes", help="Prints the current state of the puzzle", dest="max_nodes", type=int)
 
     if not os.path.isfile("Command.csv"):  # looks for the commands
         error("Command.csv could not be found. Creating file now")
@@ -102,7 +104,7 @@ if __name__ == "__main__":
                 if userIn[1] == "a-star" or userIn[1] == "aStar" or userIn[1] == "astar":  # A* style
                     AStar.AStar(puzzle)
                 elif userIn[1] == "beam":  # Beam style
-                    print("TEMP, Solve beam you FUcK")  # TODO BEAM
+                    Beam.Beam(puzzle)
                 else:
                     error("Please enter a valid command or type 'help'")
                 stop = timeit.default_timer()  # stop the timer
