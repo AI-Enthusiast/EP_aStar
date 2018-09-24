@@ -44,6 +44,13 @@ class EightPuzzle:
     def __lt__(self, other):
         return self.__hash__() < other.__hash__()
 
+    # Checks if the goal has been met
+    def isGoal(self):
+        for i in range(len(self.State)):  # itterates through State and goal double checking they match
+            if goal[i] != self.State[i]:  # if they dont match
+                return False
+        return True
+
     # Confirms the given state is valid
     def validState(self, state):
         # double checks it's of the right length(you can never trust the user)
@@ -125,14 +132,6 @@ class EightPuzzle:
             self.State = str(''.join(state))
         else:
             return EightPuzzle(state=str(''.join(state)), parent=(direction, self), b=y, depth=self.Depth + 1)
-
-
-# Checks if the goal has been met
-def isGoal(puzzle):
-    for i in range(len(puzzle)):  # itterates through State and goal double checking they match
-        if goal[i] != puzzle[i]:  # if they dont match
-            return False
-    return True
 
 
 # Moves the tile up, down, left, right

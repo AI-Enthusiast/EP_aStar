@@ -24,7 +24,7 @@ class Beam:
         goal = False
         open, closed = [], {}  # nodes to visit, nodes to not visit
 
-        if puzzle.isGoal(puzzle.State):  # if the current puzzle is the goal state
+        if puzzle.isGoal():  # if the current puzzle is the goal state
             puzzle.generateSolutionPath()  # goal has been achieved
         else:  # work toward the goal
             open.append(puzzle)  # add the starting puzzle to open

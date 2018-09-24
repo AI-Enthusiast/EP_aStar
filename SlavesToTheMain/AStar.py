@@ -37,7 +37,7 @@ class AStar:
     def aStar(self, puzzle):
         goal = False
         open, closed = [], {}  # nodes to visit, nodes to not visit
-        if ep.isGoal(puzzle.State):  # if the current puzzle is the goal state
+        if puzzle.isGoal():  # if the current puzzle is the goal state
             puzzle.generateSolutionPath()  # goal has been achieved
         else:  # work toward the goal
             open.append(puzzle)  # add the starting puzzle to open
@@ -49,7 +49,7 @@ class AStar:
                 newBranches = ep.move(branch,
                                       0)  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
                 for stem in range(len(newBranches)):  # for each expantion of the branch
-                    if ep.isGoal(newBranches[stem].State):  # if it's the goal
+                    if newBranches[stem].isGoal():  # if it's the goal
                         newBranches[stem].generateSolutionPath([])  # generate solution
                         goal = True  # we are done
                         break  # goal has been achieved

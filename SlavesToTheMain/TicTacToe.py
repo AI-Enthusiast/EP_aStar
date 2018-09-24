@@ -1,11 +1,11 @@
 # TicTacToe.py created for representing the classic puzzle of the same name
 # DateCreated: 9/16/18
 # Author: Cormac Dacker (cxd289)
-#TODO Finish
+# TODO Finish
 import random
 from typing import List
 
-random.seed(23)
+random.seed(13)
 
 
 def error(errorMessage):
@@ -38,6 +38,25 @@ class TicTacToe:
     def __str__(self):
         print("TEMP")
 
+    # Checks if the goal has been met
+    def isGoal(self):
+        player = self.Player
+        board = self.State
+
+        # Compares there tile locations to see if it's a win
+        def compare(x, y, z):
+            return (board[x] == player and board[y] == player and board[z] == player)
+
+        # Given a board and a player, this function returns True if that player has won.
+        return (compare(0, 1, 2) or  # across the top
+                compare(3, 4, 5) or  # across the middle
+                compare(6, 7, 8) or  # across the bottom
+                compare(0, 3, 6) or  # down the left side
+                compare(1, 4, 7) or  # down the middle
+                compare(2, 5, 8) or  # down the right side
+                compare(0, 4, 8) or  # diagonal left down to right
+                compare(2, 4, 6))  # diagonal right down to left
+
     def validState(self):
         if self.Player != "X" and self.Player != "O":
             raise ValueError("Player ID", self.Player, "is not a valid player ID, please select either 'X' or 'O'")
@@ -58,16 +77,3 @@ def move(puzzle: TicTacToe) -> List[TicTacToe]:
             state[tile] = puzzle.Player
             moves.append(state)
     return moves
-
-# Checks if the goal has been met
-def isGoal(puzzle: TicTacToe, player):
-    board = puzzle.State
-    # Given a board and a player, this function returns True if that player has won.
-    return ((board[0] == player and board[1] == player and board[2] == player) or  # across the top
-            (board[3] == player and board[4] == player and board[5] == player) or  # across the middle
-            (board[6] == player and board[7] == player and board[8] == player) or  # across the bottom
-            (board[0] == player and board[3] == player and board[6] == player) or  # down the left side
-            (board[1] == player and board[4] == player and board[7] == player) or  # down the middle
-            (board[2] == player and board[5] == player and board[8] == player) or  # down the right side
-            (board[0] == player and board[4] == player and board[8] == player) or  # diagonal left down to right
-            (board[2] == player and board[4] == player and board[6] == player))  # diagonal right down to left

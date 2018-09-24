@@ -23,18 +23,19 @@ def createFile():
 def readFile():
     with open("Command.csv", "r", newline='', encoding='utf8') as csvfile:
         DataReader = csv.reader(csvfile, delimiter=",", quotechar=" ")
-        out = []  # you're beautiful (shhh it's a secrete)
+        out = []  # you're beautiful (shhh it's a secret)
         for Item in DataReader:
             out.append(Item)
         csvfile.close()
         return out[0]
 
-#TODO finish
+
+# TODO finish
 # main's main ;)
 if __name__ == "__main__":
     newGame = True
     puzzle = None
-
+    commands = []
     print('> Welcome')
 
     # Commandline interface #TODO make these commands do something
@@ -45,18 +46,30 @@ if __name__ == "__main__":
     parser.add_argument("-aStar", help="Solves the puzzle A* style", dest="a_star", type=bool)
     parser.add_argument("-beam", help="Solves the puzzle Beam style", dest="beam", type=bool)
     parser.add_argument("-print", help="Prints the current state of the puzzle", dest="print", type=bool)
-    parser.add_argument("-maxNodes", help="Prints the current state of the puzzle", dest="max_nodes", type=int)
+    parser.add_argument("-maxNodes", help="The max depth A* can visit", dest="max_nodes", type=int)
+    parser.add_argument("-file", help="The file to  read commands from, is a csv", dest="file", type=str)
+    args = parser.parse_args()
 
-    if not os.path.isfile("Command.csv"):  # looks for the commands
-        error("Command.csv could not be found. Creating file now")
-        createFile()
-
-    commands = readFile()  # read commands
+    if args.file is not None:  # if commanded to read from file instead of directly
+        if not os.path.isfile(args.file):  # looks for the commands
+            error(str(args.file) + "could not be found. Creating file now. Please insert your commands into this file")
+            createFile()
+        commands = readFile()  # read commands
+    else:  # if given a direct command
+        args = (args.__str__()[10:-1]).split(',')  # splits the string at ',' and removes the unessisary parts
+        for i in range(len(args)):  # this loop converts the commands into a readable format for the main loop
+            args[i] = str(args[i]).split("=")
+            if args[i][1] != 'None':
+                commands.append(' '.join(args[i]))
+                print("args[i][1]",args[i][1])
+            print("args", args)
+            print("commands",commands)  # TEMP
 
     # This is all one big loop for user commands
-    for cmd in range(len(commands)):
-        userIn = str(commands[cmd]).split(' ')
-        print("\n>>", ' '.join(userIn))
+    for cmd in range(len(commands)):  # MAIN LOOP
+        print('main commands', commands)
+        userIn = str(commands[cmd].split())
+        print("\n>>", ''.join(''.join(userIn)))
 
         if userIn[0] == 'state' or userIn[0] == 'setState':  # if the user commands a state
             uI = ' '.join(userIn[1:]).lower().replace(' ', '')
