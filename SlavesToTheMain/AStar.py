@@ -13,15 +13,21 @@ def error(errorMessage):
 
 class AStar:
     # Constructor
-    # Params: puzzle(the puzzle being solved), maxNodes(the maximum depth)
-    def __init__(self, puzzle, maxNodes=31):
+    # Params: puzzle(the puzzle being solved), heuristic(either 'h1' or 'h2', maxNodes(the maximum depth)
+    def __init__(self, puzzle, heuristic, maxNodes):
         self.MaxNodes = maxNodes
+        self.H = heuristic
         self.aStar(puzzle)  # print aStar solution
 
     # The heuristic function
     # F(x) = h1(x) + h2(x) + Current_Depth(x)
     def f(self, puzzle):
-        return ep.h1(puzzle) + ep.h2(puzzle) + puzzle.Depth
+        if self.H == 'h1': #TODO figure out why h1 doesn't work
+            return ep.h1(puzzle) + (puzzle.Depth/2)
+        if self.H == 'h2':
+            return ep.h2(puzzle) + puzzle.Depth
+        else:
+            raise ValueError("Please enter a valid heuristic for A*. Either 'h1' or 'h2'")
 
     # Chooses a branch based off a priority queue representing the heuristic function of the puzzles
     def chooseBranch(self, open, closed):
@@ -42,8 +48,12 @@ class AStar:
         else:  # work toward the goal
             open.append(puzzle)  # add the starting puzzle to open
             while open is not None:  # while there are still nodes to expand in open
-                branch = self.chooseBranch(open,
-                                           closed)  # type: ep.EightPuzzle or ttt.TicTacToe #choose a branch from open
+                try:
+                    branch = self.chooseBranch(open,
+                                               closed)  # type: ep.EightPuzzle or ttt.TicTacToe #choose a branch from open
+                except ValueError as e:  # if invalid heuristic given
+                    error(e)
+                    break
                 closed[branch.State] = branch  # add the chosen branch to the closed table
                 open.remove(branch)  # remove the branch from open
                 newBranches = ep.move(branch,
@@ -58,3 +68,6 @@ class AStar:
                         open.append(newBranches[stem])  # add stem to open nodes
                 if goal:
                     break
+if __name__ == '__main__':
+    error("Please run from 'main.py'")
+    quit()

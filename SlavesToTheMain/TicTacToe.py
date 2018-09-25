@@ -77,3 +77,6 @@ def move(puzzle: TicTacToe) -> List[TicTacToe]:
             state[tile] = puzzle.Player
             moves.append(state)
     return moves
+if __name__ == '__main__':
+    error("Please run from 'main.py'")
+    quit()

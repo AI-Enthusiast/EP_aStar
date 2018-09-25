@@ -24,7 +24,7 @@ class EightPuzzle:
         self.B = b
         self.Depth = depth
         if str(state).lower() == "random":  # default to random
-            self.randomizeState(random)
+            self.randomizeState(int(random))
             self.__str__()
         else:
             try:
@@ -36,9 +36,8 @@ class EightPuzzle:
                     self.State = str(state).replace(' ', '')  # finally sets the state to State for one dimention
             except ValueError and TypeError as e:  # if you gave a screwy state
                 error(e)
-                # TODO double check user inputed states are solvable
                 print('Setting state to random instead')
-                self.randomizeState(random)
+                self.randomizeState(int(random))
 
     # allows for EightPuzzle() < EightPuzzle() conparison
     def __lt__(self, other):
@@ -53,6 +52,18 @@ class EightPuzzle:
 
     # Confirms the given state is valid
     def validState(self, state):
+
+        # Counts the number of inversions with the given state, outputs odd or even number
+        def inversions():
+            inversion_count = 0
+            for tile in range(len(state)):  # for each tile in the state
+                if state[tile] != 'b' and tile != 0:  # if not blank tile or the fist tile
+                    for compare in range(tile - 1,-1,-1):  # work backwards counting tiles that shouldn't be there
+                        if state[compare] != 'b': # if not blank tile
+                            if state[tile] < state[compare]: # if a previouse tile is greater than current tile
+                                inversion_count += 1
+            return inversion_count
+
         # double checks it's of the right length(you can never trust the user)
         if len(state) == 9:
             # loops validates that entered state has all the right tiles
@@ -66,13 +77,17 @@ class EightPuzzle:
                         raise ValueError("State", state[i],
                                          "not found. Please enter state correctly, 1->8 and a 'b'.")
                 continue  # continue to next iteration
-            return True
+            if inversions() % 2 == 0: # inversions determins state to be solvable
+                return True
+            else:
+                raise ValueError("Please enter a solvable state. Your state:",state)
         else:
             raise ValueError(
                 "Please format the desiered state correctly, e.g. 'b12 345 678'. Must be of length 9. "
                 "You entered a string of length", len(state), state)
 
     # Creates a random starting state
+    # Param: r(the range of random)
     def randomizeState(self, r):
         self.State = 'b12345678'  # sets 1d state
         self.B = 0  # location of the b tile
@@ -90,9 +105,11 @@ class EightPuzzle:
     # creates a string to visually represent the board
     def __str__(self):
         tile = self.State
-        out = "{0}\t{1}\t{2}\n" \
-              "{3}\t{4}\t{5}\n" \
-              "{6}\t{7}\t{8}".format(
+        out = "\t{0}   |   {1}   |   {2}\n" \
+              "\t-----------------\n" \
+              "\t{3}   |   {4}   |   {5}\n" \
+              "\t-----------------\n" \
+              "\t{6}   |   {7}   |   {8}".format(
             tile[0], tile[1], tile[2],
             tile[3], tile[4], tile[5],
             tile[6], tile[7], tile[8])
@@ -100,9 +117,7 @@ class EightPuzzle:
 
     # Creates the path to the parent from the current node (this assumes that node is the goal)
     # Recursive
-    def generateSolutionPath(self, path=None):
-        if path is None:
-            path = []
+    def generateSolutionPath(self, path=[]):
         if self.Parent is None:  # your at the top
             path.reverse()  # reverse order as they are added in
             print("Number of moves:", len(path))
@@ -251,7 +266,5 @@ def h2(puzzle):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        uI = sys.argv[1:]
-        for i in range(uI):
-            print("TEMP")
+    error("Please run from 'main.py'")
+    quit()

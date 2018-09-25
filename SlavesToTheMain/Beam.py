@@ -6,7 +6,7 @@ from SlavesToTheMain import EightPuzzle as ep
 def error(errorMessage):
     print(">ERROR:\t" + str(errorMessage))
 
-
+#TODO finish Beam
 class Beam:
 
     # Constructor
@@ -19,7 +19,6 @@ class Beam:
     def chooseBranch(self, open):
         print("TEMP")
 
-    #TODO finish
     def beam(self, puzzle):
         goal = False
         open, closed = [], {}  # nodes to visit, nodes to not visit
@@ -39,3 +38,7 @@ class Beam:
                     successors = open[state].move()
                     for stem in range(len(successors)):
                         print("TEMP")
+
+if __name__ == '__main__':
+    error("Please run from 'main.py'")
+    quit()
