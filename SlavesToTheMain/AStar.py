@@ -14,33 +14,45 @@ def error(errorMessage):
 class AStar:
     # Constructor
     # Params: puzzle(the puzzle being solved), heuristic(either 'h1' or 'h2', maxNodes(the maximum depth)
-    def __init__(self, puzzle, heuristic, maxNodes):
-        self.MaxNodes = maxNodes
+    def __init__(self, puzzle, maxNodes, heuristic = 'h2'):
         self.H = heuristic
-        self.aStar(puzzle)  # print aStar solution
+        if self.H == 'h1':
+            print("f(x) = h1(x) + inversions(x)")
+        elif self.H == 'h2':
+            print("f(x) = h2(x) + inversions(x)")
+        elif self.H == 'h3':
+            print("f(x) = inversions(x) + depth(x)")
+        elif self.H == 'h4':
+            print("f(x) = h1(x) + h2(x) + inversions(x) + depth(x)")
+        else:
+            raise ValueError("Please enter a valid heuristic for A*. Either 'h1','h2','h3', or 'h4'")
+        self.aStar(puzzle, maxNodes)  # print aStar solution
 
     # The heuristic function
-    # F(x) = h1(x) + h2(x) + Current_Depth(x)
     def f(self, puzzle):
-        if self.H == 'h1': #TODO figure out why h1 doesn't work
-            return ep.h1(puzzle) + (puzzle.Depth/2)
-        if self.H == 'h2':
-            return ep.h2(puzzle) + puzzle.Depth
-        else:
-            raise ValueError("Please enter a valid heuristic for A*. Either 'h1' or 'h2'")
+        if type(puzzle) is ttt.TicTacToe: # TTT heuristic function
+            return puzzle #TEMP
+        elif self.H == 'h1':
+            return puzzle.h1() + puzzle.inversions() + puzzle.Depth
+        elif self.H == 'h2':
+            return puzzle.h2() + puzzle.inversions() + puzzle.Depth
+        elif self.H == 'h3':
+            return puzzle.inversions() + puzzle.Depth
+        elif self.H == 'h4':
+            return puzzle.h1() + puzzle.h2() + puzzle.inversions() + puzzle.Depth
 
     # Chooses a branch based off a priority queue representing the heuristic function of the puzzles
     def chooseBranch(self, open, closed):
         funcHeap = []
         for branch in range(len(open)):  # build the queue
-            if open[branch].State not in closed:
+            if str(open[branch].State) not in closed:
                 funcHeap.append((self.f(open[branch]), open[branch]))  # pushes info to the queue
         funcHeap.sort(reverse=True)
         theChosenOne = funcHeap.pop()  # picks top branch
         return theChosenOne[1]  # returns the puzzle on top
 
     # The one and only A* it'self! Say hello A*! <3
-    def aStar(self, puzzle):
+    def aStar(self, puzzle, maxNodes):
         goal = False
         open, closed = [], {}  # nodes to visit, nodes to not visit
         if puzzle.isGoal():  # if the current puzzle is the goal state
@@ -56,18 +68,25 @@ class AStar:
                     break
                 closed[branch.State] = branch  # add the chosen branch to the closed table
                 open.remove(branch)  # remove the branch from open
-                newBranches = ep.move(branch,
-                                      0)  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
+                newBranches = branch.move(
+                    0)  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
                 for stem in range(len(newBranches)):  # for each expantion of the branch
                     if newBranches[stem].isGoal():  # if it's the goal
                         newBranches[stem].generateSolutionPath([])  # generate solution
+                        print("Number of moves:", newBranches[stem].Depth)
+                        print("Total nodes explored:", len(open) + closed.__len__())
                         goal = True  # we are done
                         break  # goal has been achieved
                     # if not in closed & not exceeded depth
-                    if newBranches[stem].State not in closed and newBranches[stem].Depth < self.MaxNodes:
+                    if newBranches[stem].State not in closed and newBranches[stem].Depth < 31:
                         open.append(newBranches[stem])  # add stem to open nodes
                 if goal:
                     break
+                elif len(open) + closed.__len__() > maxNodes:
+                    error("Max nodes exceeded")
+                    break
+
+
 if __name__ == '__main__':
     error("Please run from 'main.py'")
     quit()

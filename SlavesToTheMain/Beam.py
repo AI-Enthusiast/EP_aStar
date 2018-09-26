@@ -17,7 +17,7 @@ class Beam:
         self.beam(puzzle)  # print aStar solution
 
     def chooseBranch(self, open):
-        print("TEMP")
+        return open[0]
 
     def beam(self, puzzle):
         goal = False
@@ -33,11 +33,9 @@ class Beam:
                 closed[branch.State] = branch  # add the chosen branch to the closed table
                 open.remove(branch)  # remove the branch from open
                 set = None  # the empty set
-
-                for state in open:
-                    successors = open[state].move()
-                    for stem in range(len(successors)):
-                        print("TEMP")
+                open.append(branch.move()) # append succesors
+                if branch.isGoal:
+                    print("TEMP")
 
 if __name__ == '__main__':
     error("Please run from 'main.py'")

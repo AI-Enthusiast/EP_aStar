@@ -1,1 +1,1 @@
-randomizeState 35,solve aStar h1,solve aStar h2,randomizeState 35,solve beam
+randomizeState 100,solve aStar h1,solve aStar h2,solve aStar h3,solve aStar h4,randomizeState 100,solve beam

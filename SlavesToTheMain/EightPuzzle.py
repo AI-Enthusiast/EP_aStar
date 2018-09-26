@@ -3,7 +3,6 @@
 # Author: Cormac Dacker (cxd289)
 
 import random
-import sys
 from typing import List
 
 random.seed(13)
@@ -19,7 +18,7 @@ class EightPuzzle:
 
     # Constructor
     # Params: state(as a string of length 9), parent (type: EightPuzzle), b(location of the b tile)
-    def __init__(self, state="random", random=100, parent=None, b=None, depth=0):
+    def __init__(self, state="random", random=42, parent=None, b=None, depth=0):
         self.Parent = parent
         self.B = b
         self.Depth = depth
@@ -52,39 +51,26 @@ class EightPuzzle:
 
     # Confirms the given state is valid
     def validState(self, state):
-
-        # Counts the number of inversions with the given state, outputs odd or even number
-        def inversions():
-            inversion_count = 0
-            for tile in range(len(state)):  # for each tile in the state
-                if state[tile] != 'b' and tile != 0:  # if not blank tile or the fist tile
-                    for compare in range(tile - 1,-1,-1):  # work backwards counting tiles that shouldn't be there
-                        if state[compare] != 'b': # if not blank tile
-                            if state[tile] < state[compare]: # if a previouse tile is greater than current tile
-                                inversion_count += 1
-            return inversion_count
-
         # double checks it's of the right length(you can never trust the user)
-        if len(state) == 9:
-            # loops validates that entered state has all the right tiles
-            for i in range(len(state)):
-                for j in range(len(goal)):
-                    if goal[j] == state[i]:  # if the state has a correct tile
-                        if j == 0:  # ie if the blank tile has been found
-                            self.B = i  # location of the blank tile
-                        break  # break causes jump to the continue 4 lines down
-                    elif j == 8:  # a tile could not be found
-                        raise ValueError("State", state[i],
-                                         "not found. Please enter state correctly, 1->8 and a 'b'.")
-                continue  # continue to next iteration
-            if inversions() % 2 == 0: # inversions determins state to be solvable
-                return True
-            else:
-                raise ValueError("Please enter a solvable state. Your state:",state)
-        else:
+        if len(state) != 9:
             raise ValueError(
                 "Please format the desiered state correctly, e.g. 'b12 345 678'. Must be of length 9. "
                 "You entered a string of length", len(state), state)
+        # loops validates that entered state has all the right tiles
+        for i in range(len(state)):
+            for j in range(len(goal)):
+                if goal[j] == state[i]:  # if the state has a correct tile
+                    if state[i] == "b":  # ie if the blank tile has been found
+                        self.B = i  # location of the blank tile
+                    break  # break causes jump to the continue 4 lines down
+                elif j == 8:  # a tile could not be found
+                    raise ValueError("State", state[i],
+                                     "not found. Please enter state correctly, 1->8 and a 'b'.")
+            continue  # continue to next iteration
+        if self.inversions() % 2 == 0:  # inversions determins state to be solvable
+            return True
+        else:
+            raise ValueError("Please enter a solvable state. Your state:", state)
 
     # Creates a random starting state
     # Param: r(the range of random)
@@ -93,7 +79,7 @@ class EightPuzzle:
         self.B = 0  # location of the b tile
         # loop moves the blank piece 100 times in r directions
         for i in range(0, r):
-            moves = move(self, 0)  # type: List[EightPuzzle]
+            moves = self.move(0)  # type: List[EightPuzzle]
             ran = random.randint(0, len(moves) - 1)  # produce a r int between 1 and num of moves
             try:
                 self.State = moves[ran].State  # sets state to chosen r move
@@ -120,7 +106,6 @@ class EightPuzzle:
     def generateSolutionPath(self, path=[]):
         if self.Parent is None:  # your at the top
             path.reverse()  # reverse order as they are added in
-            print("Number of moves:", len(path))
             print(' --> '.join(path))
         else:  # there are still parent nodes
             path.append(self.Parent[0])
@@ -148,29 +133,84 @@ class EightPuzzle:
         else:
             return EightPuzzle(state=str(''.join(state)), parent=(direction, self), b=y, depth=self.Depth + 1)
 
+    # Moves the tile up, down, left, right
+    # setting ( 0 = return states instead of setting them, 1 = set states at each move)
+    # the setting in this case is just to pass it along to lower level helpers
+    def move(self, setting=1):
+        puzzle = self
+        moves = []
+        try:
+            moves.append(moveUp(puzzle, setting))  # move up
+        except UnboundLocalError:  # cant go up
+            pass
+        try:
+            moves.append(moveDown(puzzle, setting))  # move down
+        except UnboundLocalError:  # cant go down
+            pass
+        try:
+            moves.append(moveLeft(puzzle, setting))  # move left
+        except UnboundLocalError:  # cant go left
+            pass
+        try:
+            moves.append(moveRight(puzzle, setting))  # move right
+        except UnboundLocalError:  # cant go right
+            pass
+        return moves
 
-# Moves the tile up, down, left, right
-# setting ( 0 = return states instead of setting them, 1 = set states at each move)
-# the setting in this case is just to pass it along to lower level helpers
-def move(puzzle: EightPuzzle, setting=1) -> List[EightPuzzle]:
-    moves = []
-    try:
-        moves.append(moveUp(puzzle, setting))  # move up
-    except UnboundLocalError:  # cant go up
-        pass
-    try:
-        moves.append(moveDown(puzzle, setting))  # move down
-    except UnboundLocalError:  # cant go down
-        pass
-    try:
-        moves.append(moveLeft(puzzle, setting))  # move left
-    except UnboundLocalError:  # cant go left
-        pass
-    try:
-        moves.append(moveRight(puzzle, setting))  # move right
-    except UnboundLocalError:  # cant go right
-        pass
-    return moves
+    # First Heuristic is based on the number of tiles out of place
+    # the less the better
+    def h1(self):
+        puzzle = self
+        numOutOfPlace = 0
+        for i in range(len(goal)):
+            if goal[i] != puzzle.State[i]:
+                numOutOfPlace += 1
+        return numOutOfPlace
+
+    # Second heuristic is based on the distance of tiles to goal state (Manhattan Distance)
+    # the less the better
+    def h2(self):
+        puzzle = self
+        distTot = 0  # var for total distance
+        for i in range(len(goal)):
+            if puzzle.State[i] == goal[i]:  # if it's already on the right one
+                continue
+            else:
+                tilePos = 0
+                for j in range(len(puzzle.State)):
+                    if puzzle.State[j] == goal[i]:  # if you find the current possion of the tile
+                        tilePos = j
+                        break  # break the loop cb tile found
+                while tilePos != i:
+                    if i < tilePos:  # if the tile needs to be moved up or left
+                        if tilePos - 3 >= 0 and tilePos - 3 >= i:  # if it needs to be moved up
+                            tilePos -= 3  # move the tile up
+                            distTot += 1
+                        elif tilePos - i < 3:  # if the tile needs to be moved left
+                            dist = tilePos - i
+                            tilePos -= dist
+                            distTot += dist
+                    elif i > tilePos:  # if the tile needs to be moved down or right
+                        if tilePos + 3 <= 8 and tilePos + 3 <= i:  # if it needs to be moved down
+                            tilePos += 3
+                            distTot += 1
+                        elif i - tilePos < 3:  # if the tile needs to be moved right
+                            dist = i - tilePos
+                            tilePos += dist
+                            distTot += dist
+        return distTot
+
+    # Counts the number of inversions with the given state, outputs odd or even number
+    def inversions(self):
+        state = self.State
+        inversion_count = 0
+        for tile in range(len(state)):  # for each tile in the state
+            if state[tile] != 'b' and tile != 0:  # if not blank tile or the fist tile
+                for compare in range(tile - 1, -1, -1):  # work backwards counting tiles that shouldn't be there
+                    if state[compare] != 'b':  # if not blank tile
+                        if state[tile] < state[compare]:  # if a previouse tile is greater than current tile
+                            inversion_count += 1
+        return inversion_count
 
 
 # Moves the blank tile up
@@ -220,49 +260,6 @@ def moveRight(puzzle, setting=1):
             puzzle.swap(puzzle.B, puzzle.B + 1, setting)
         else:  # return the node made from moving
             return puzzle.swap(puzzle.B, puzzle.B + 1, "Right", setting)
-
-
-# First Heuristic is based on the number of tiles out of place
-# the less the better
-def h1(puzzle):
-    numOutOfPlace = 0
-    for i in range(len(goal)):
-        if goal[i] != puzzle.State[i]:
-            numOutOfPlace += 1
-    return numOutOfPlace
-
-
-# Second heuristic is based on the distance of tiles to goal state (Manhattan Distance)
-# the less the better
-def h2(puzzle):
-    distTot = 0  # var for total distance
-    for i in range(len(goal)):
-        if puzzle.State[i] == goal[i]:  # if it's already on the right one
-            continue
-        else:
-            tilePos = 0
-            for j in range(len(puzzle.State)):
-                if puzzle.State[j] == goal[i]:  # if you find the current possion of the tile
-                    tilePos = j
-                    break  # break the loop cb tile found
-            while tilePos != i:
-                if i < tilePos:  # if the tile needs to be moved up or left
-                    if tilePos - 3 >= 0 and tilePos - 3 >= i:  # if it needs to be moved up
-                        tilePos -= 3  # move the tile up
-                        distTot += 1
-                    elif tilePos - i < 3:  # if the tile needs to be moved left
-                        dist = tilePos - i
-                        tilePos -= dist
-                        distTot += dist
-                elif i > tilePos:  # if the tile needs to be moved down or right
-                    if tilePos + 3 <= 8 and tilePos + 3 <= i:  # if it needs to be moved down
-                        tilePos += 3
-                        distTot += 1
-                    elif i - tilePos < 3:  # if the tile needs to be moved right
-                        dist = i - tilePos
-                        tilePos += dist
-                        distTot += dist
-    return distTot
 
 
 if __name__ == '__main__':

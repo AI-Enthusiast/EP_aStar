@@ -18,5 +18,14 @@ optional arguments:
   -print PRINT          Prints the current state of the puzzle
   -file FILE            The file to read commands from, is a csv
 
-2b. example commandline input: "python main.py -randomizeState 60 -aStar h2"
+2b. example commandline inputs: 
+	"python main.py -randomizeState 60 -aStar h2" 
+	"python main.py -file Command.csv"
 3. Once the commands are done executing you can directly interact with the program. 
+
+EXTRA CREDIT:
+1. Once all your commands have run and you are directly interacting with the script, input "ttt <player (either 'X' or 'O")>" to initiallize a game of ttt.
+2. You are playing against the computer
+3. Move by entering "move <Row,Col>" (0,0) is in the top left, (2,2) is in the bottom right. Eg type "move 1 2"
+
+Good Luck! :)
