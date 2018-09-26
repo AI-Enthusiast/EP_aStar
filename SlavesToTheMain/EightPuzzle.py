@@ -1,7 +1,7 @@
 # EightPuzzle.py created for representing the classic puzzle of the same name
 # DateCreated: 9/7/18
 # Author: Cormac Dacker (cxd289)
-
+import math
 import random
 from typing import List
 
@@ -181,6 +181,7 @@ class EightPuzzle:
                     if puzzle.State[j] == goal[i]:  # if you find the current possion of the tile
                         tilePos = j
                         break  # break the loop cb tile found
+
                 while tilePos != i:
                     if i < tilePos:  # if the tile needs to be moved up or left
                         if tilePos - 3 >= 0 and tilePos - 3 >= i:  # if it needs to be moved up
@@ -198,6 +199,46 @@ class EightPuzzle:
                             dist = i - tilePos
                             tilePos += dist
                             distTot += dist
+        return distTot
+
+    # Second heuristic is based on the distance of tiles to goal state (Manhattan Distance)
+    # the less the better
+    def euclidianDist(self):
+        puzzle = self
+        distTot = 0  # var for total distance
+        for i in range(len(goal)):
+            if puzzle.State[i] == goal[i]:  # if it's already on the right one
+                continue
+            else:
+                tilePos = 0 # the position of the tile
+                up = 0 # the num of moves up or down it must move
+                over = 0 # the num of moves left or right it must move
+                for j in range(len(puzzle.State)):
+                    if puzzle.State[j] == goal[i]:  # if you find the current possion of the tile
+                        tilePos = j
+                        break  # break the loop cb tile found
+                while tilePos != i:
+                    if i < tilePos:  # if the tile needs to be moved up or left
+                        if tilePos - 3 >= 0 and tilePos - 3 >= i:  # if it needs to be moved up
+                            tilePos -= 3  # move the tile up
+                            distTot += 1
+                            up += 1
+                        elif tilePos - i < 3:  # if the tile needs to be moved left
+                            dist = tilePos - i
+                            tilePos -= dist
+                            distTot += dist
+                            over += 1
+                    elif i > tilePos:  # if the tile needs to be moved down or right
+                        if tilePos + 3 <= 8 and tilePos + 3 <= i:  # if it needs to be moved down
+                            tilePos += 3
+                            distTot += 1
+                            up += 1
+                        elif i - tilePos < 3:  # if the tile needs to be moved right
+                            dist = i - tilePos
+                            tilePos += dist
+                            distTot += dist
+                            over += 1
+                distTot += math.sqrt(up + over)
         return distTot
 
     # Counts the number of inversions with the given state, outputs odd or even number

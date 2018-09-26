@@ -48,8 +48,8 @@ class AStar:
             if str(open[branch].State) not in closed:
                 funcHeap.append((self.f(open[branch]), open[branch]))  # pushes info to the queue
         funcHeap.sort(reverse=True)
-        theChosenOne = funcHeap.pop()  # picks top branch
-        return theChosenOne[1]  # returns the puzzle on top
+        theChosenOne = funcHeap.pop()[1]  # picks top branch
+        return theChosenOne # returns the puzzle on top
 
     # The one and only A* it'self! Say hello A*! <3
     def aStar(self, puzzle, maxNodes):
@@ -71,12 +71,15 @@ class AStar:
                 newBranches = branch.move(
                     0)  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
                 for stem in range(len(newBranches)):  # for each expantion of the branch
-                    if newBranches[stem].isGoal():  # if it's the goal
-                        newBranches[stem].generateSolutionPath([])  # generate solution
-                        print("Number of moves:", newBranches[stem].Depth)
-                        print("Total nodes explored:", len(open) + closed.__len__())
-                        goal = True  # we are done
-                        break  # goal has been achieved
+                    try:
+                        if newBranches[stem].isGoal():  # if it's the goal
+                            newBranches[stem].generateSolutionPath([])  # generate solution
+                            print("Number of moves:", newBranches[stem].Depth)
+                            print("Total nodes explored:", len(open) + closed.__len__())
+                            goal = True  # we are done
+                            break  # goal has been achieved
+                    except Exception: # draws
+                        continue
                     # if not in closed & not exceeded depth
                     if newBranches[stem].State not in closed and newBranches[stem].Depth < 31:
                         open.append(newBranches[stem])  # add stem to open nodes

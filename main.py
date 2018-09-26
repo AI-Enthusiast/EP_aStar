@@ -33,6 +33,14 @@ def readFile():
         return out
 
 
+def playAgain():
+    userIn = input('>>').lower()  # splits the input at every space
+    if userIn == 'n' or 'no':
+        quit()
+    else:
+        print("> Please enter a starting state 'state <state>' or type 'state' for a random state")
+
+
 def commandCenter(commands):
     newGame = True
     puzzle = None  # the puzzle being opporated on
@@ -83,30 +91,32 @@ def commandCenter(commands):
                 continue
 
         elif not newGame:  # There is an incomplete game in place (no way out but to win)
-
-            if puzzle.isGoal():  # WIN! NEW GAME
-                print("> You Win! Play again y/n?")
-                userIn = input('>>').lower()  # splits the input at every space
-                if userIn == 'n' or 'no':
-                    quit()
-                else:
+            try:
+                if puzzle.isGoal():  # WIN! NEW GAME
+                    print("> You Win! Play again y/n?")
                     newGame = True
-                    print("> Please enter a starting state 'state <state>' or type 'state' for a random state")
+                    playAgain()
                     continue  # goto next iteration in the loop
+            except Exception:  # DRAW
+                print("> Draw! Play again y/n?")
+                newGame = True
+                playAgain()
+                continue  # goto next iteration in the loop
 
-            elif userIn[0] == "solve":  # user commands to solve
+            if userIn[0] == "solve":  # user commands to solve
                 start = timeit.default_timer()  # start timer
 
-                if type(puzzle) is ttt.TicTacToe:
-                    AStar.AStar(puzzle, maxNodes)
-                else:
-                    # A* style
-                    if userIn[1] == "a-star" or userIn[1] == "aStar" or userIn[1] == "astar" or userIn[1] == "a_star":
-                        AStar.AStar(puzzle,heuristic= userIn[2], maxNodes=maxNodes)  # takes puzzle, heuristic, and maxNodes
-                    elif userIn[1] == "beam":  # Beam style
-                        Beam.Beam(puzzle, userIn[2])  # takes puzzle and k value
+                # A* style
+                if userIn[1] == "a-star" or userIn[1] == "aStar" or userIn[1] == "astar" or userIn[1] == "a_star":
+                    if type(puzzle) is ttt.TicTacToe:
+                        AStar.AStar(puzzle, maxNodes)
                     else:
-                        error("Please enter a valid command or type 'help'")
+                        AStar.AStar(puzzle, heuristic=userIn[2], maxNodes=maxNodes)  # takes puzzle, heuristic, and maxNodes
+                elif userIn[1] == "beam":  # Beam style
+                    if len(userIn) < 3:
+                        error("Please provide a k for beam")
+                        continue
+                    Beam.Beam(puzzle, userIn[2])  # takes puzzle and k value
                 stop = timeit.default_timer()  # stop the timer
                 print("Time to solve:", stop - start, "seconds")  # print time
 
@@ -145,14 +155,12 @@ def commandCenter(commands):
             else:
                 error("Please enter a valid command or type 'help'")
         elif userIn[0] == 'help':  # user needs help with commands
-            print(
-                "> Valid commands include 'state <state>' or 'setState <state>', the '<state>' is optional and if not"
-                " inputted will create a random state. format the <state> = 'b12345678' or 'b12 345 678'")
+            print("> Valid commands include 'state <state>' or 'setState <state>', the '<state>' is optional and if not"
+            " inputted will create a random state. format the <state> = 'b12345678' or 'b12 345 678'")
         else:
             error("Please enter a valid command or type 'help'")
         if cmd <= len(commands):  # if cmd is not greater than the number of commands
             cmd += 1  # incrememnt command
-
 
 # main's main ;)
 if __name__ == "__main__":

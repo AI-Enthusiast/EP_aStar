@@ -44,8 +44,14 @@ class TicTacToe:
             tile[6], tile[7], tile[8])
         print(out)
 
+    # allows for TTT() < TTT() conparison
+    def __lt__(self, other):
+        return self.__hash__() < other.__hash__()
+
     # Checks if the goal has been met
     def isGoal(self):
+        if self.move() is None:
+            raise Exception
         # Given a board and a player, this function returns True if that player has won.
         return (compare(self, 0, 1, 2) or  # across the top
                 compare(self, 3, 4, 5) or  # across the middle
@@ -99,6 +105,11 @@ class TicTacToe:
             path.append(self.Parent[0])
             return self.Parent[1].generateSolutionPath(path)  # recursively self call for path
 
+    def h1(self):
+        if self.move() is None:
+            return 0
+        if self.isGoal():
+            return 1
 
 # Compares there tile locations to see if it's a win
 def compare(puzzle, x, y, z):
