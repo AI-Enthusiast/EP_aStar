@@ -33,23 +33,36 @@ class Beam:
     def beam(self, puzzle):
         goal = False
         open, closed = [], {}  # nodes to visit, nodes to not visit
-        children = []# type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
+        children = []  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # childern of that branch
         if puzzle.isGoal():  # if the current puzzle is the goal state
             puzzle.generateSolutionPath()  # goal has been achieved
         else:  # work toward the goal
             open.append(puzzle)  # add the starting puzzle to open
             while True:
+                print("open",open)
+                print("children", children)
+
                 while open is not None:  # while there are still nodes to expand in open
-                    stems = (self.chooseBranch(open,closed)) # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
-                    for i in range(len(stems)):
-                        children.append(stems[i])
-                    closed[children[0].State] = children[0] # add the chosen branch to the closed table
-                    open.remove(children[0])  # remove the branch from open
-                    if branch[0].isGoal():
-                        print("TEMP")
-                open.append(children)
-                while len(open) > self.K:
-                    open.pop()
+                    for child in range(len(open)): # for each puzzle in open
+                        children.append(open(child).move) #append all it's potential moves to chldren
+                        open.remove(open[child])  # remove it from open
+                        closed[open[child].State] = open[child] # add it to closed
+                children.sort()
+                while len(children) > self.K: # remove children untill it's k size
+                    children.pop()
+                open = children.sort(reverse=True)
+                children = None
+
+                #     stems = (self.chooseBranch(open,closed)) # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
+                #     for i in range(len(stems)):
+                #         children.append(stems[i])
+                #     closed[children[0].State] = children[0] # add the chosen branch to the closed table
+                #     open.remove(children[0])  # remove the branch from open
+                #     if branch[0].isGoal():
+                #         print("TEMP")
+                # open.append(children)
+                # while len(open) > self.K:
+                #     open.pop()
 
 
 if __name__ == '__main__':
