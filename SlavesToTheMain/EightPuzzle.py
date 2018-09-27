@@ -33,10 +33,11 @@ class EightPuzzle:
                         self.__str__()
                 else:  # we don't need to validate it if it has a parent. it must be originating from a valid state.
                     self.State = str(state).replace(' ', '')  # finally sets the state to State for one dimention
-            except ValueError and TypeError as e:  # if you gave a screwy state
+            except ValueError  as e:  # if you gave a screwy state
                 error(e)
                 print('Setting state to random instead')
                 self.randomizeState(int(random))
+                self.__str__()
 
     # allows for EightPuzzle() < EightPuzzle() conparison
     def __lt__(self, other):
@@ -243,7 +244,7 @@ class EightPuzzle:
 
     # Counts the number of inversions with the given state, outputs odd or even number
     def inversions(self):
-        state = self.State
+        state = str(self.State)
         inversion_count = 0
         for tile in range(len(state)):  # for each tile in the state
             if state[tile] != 'b' and tile != 0:  # if not blank tile or the fist tile

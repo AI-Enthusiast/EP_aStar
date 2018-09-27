@@ -1,5 +1,5 @@
 1. "cd" into the directory containing "main.py"
-2. Run the program by typing "python main.py [-file FILE]" (FILE is a csv for simplicities sake)
+2. Run the program by typing "python3 main.py [-file FILE]" (FILE delimiter is '\n')
 or
 2. Directly pass instructions to the program using any of the following commands.
 usage: main.py [-h] [-setState STATE] [-randomizeState RANDOM]
@@ -20,7 +20,7 @@ optional arguments:
 
 2b. example commandline inputs: 
 	"python main.py -randomizeState 60 -aStar h2" 
-	"python main.py -file Command.csv"
+	"python main.py -file test.txt"
 3. Once the commands are done executing you can directly interact with the program. 
 
 EXTRA CREDIT:

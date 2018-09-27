@@ -14,7 +14,7 @@ def error(errorMessage):
 class AStar:
     # Constructor
     # Params: puzzle(the puzzle being solved), heuristic(either 'h1' or 'h2', maxNodes(the maximum depth)
-    def __init__(self, maxNodes,player = "X", heuristic = 'h2'):
+    def __init__(self, maxNodes,puzzle, heuristic = 'h2'):
         self.H = heuristic
         if self.H == 'h1':
             print("f(x) = h1(x) + inversions(x)")
