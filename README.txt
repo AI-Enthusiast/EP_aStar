@@ -1,28 +1,29 @@
 1. "cd" into the directory containing "main.py"
 2. Run the program by typing "python3 main.py [-file FILE]" (FILE delimiter is '\n')
 or
-2. Directly pass instructions to the program using any of the following commands.
-usage: main.py [-h] [-setState STATE] [-randomizeState RANDOM]
-               [-maxNodes MAXNODES] [-aStar A_STAR] [-beam BEAM]
-               [-print PRINT] [-file FILE]
+2. Directly pass instructions to the program using any of the following commands:
+	usage: main.py [-h][-file FILE]
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -setState STATE       e.g. 'b12 345 678' or 'b12345678' or 'random'
-  -randomizeState RANDOM
-                        Sets number of random moves to create the random board
-  -maxNodes MAXNODES    The max depth A* can visit
-  -aStar A_STAR         Solves the puzzle A* style. Given a heuristic and a
-                        maxNodes
-  -beam BEAM            Solves the puzzle Beam style. Given k as a limit
-  -print PRINT          Prints the current state of the puzzle
-  -file FILE            The file to read commands from, is a csv
+	optional arguments:
+  		-h, --help  show this help message and exit
+		-file FILE  Read commands from txt file
+
 
 2b. example commandline inputs: 
-	"python main.py -randomizeState 60 -aStar h2" 
 	"python main.py -file test.txt"
-3. Once the commands are done executing you can directly interact with the program. 
 
+3. Once the commands are done executing you can directly interact with the program. 
+	Commands:
+		quit/q : to quit
+		file FILE : to read from specified file
+		test : to run test file commands
+		randomizeState N : where N is the number of moves random moves made. Default N = 42
+		maxNodes N : where N is the number of max nodes
+		print/printState : to print the current state
+		move DIRECTION : where DIRECTION is a codinal direction "up,down,left,right"
+		solve astar H : where H is a heuristic function, "h1-h4"
+		solve beam K : where K is the number of nodes to be considered at a time
+		ttt PLAYER : to initialize a game of ttt where PLAYER is either 'X' or 'O', Default PLAYER = 'X'
 EXTRA CREDIT:
 1. Once all your commands have run and you are directly interacting with the script, input "ttt <player (either 'X' or 'O")>" to initiallize a game of ttt.
 2. You are playing against the computer

@@ -187,18 +187,8 @@ if __name__ == "__main__":
 
     # Commandline interface
     parser = argparse.ArgumentParser(description="Initialize a game and play or watch algorithms solve it")
-    parser.add_argument("-setState", help="e.g. 'b12 345 678' or 'b12345678' or 'random'", dest="state")
-    parser.add_argument("-randomizeState", help="Sets number of random moves to create the random board", dest='random',
-                        type=int)
-    parser.add_argument("-maxNodes", help="The max depth A* can visit", dest="maxNodes", type=int)
-    parser.add_argument("-aStar", help="Solves the puzzle A* style. Given a heuristic and a maxNodes", dest="a_star",
-                        type=str)
-    parser.add_argument("-beam", help="Solves the puzzle Beam style. Given k as a limit", dest="beam", type=int)
-    parser.add_argument("-print", help="Prints the current state of the puzzle", dest="print", type=bool)
-    parser.add_argument("-file", help="The file to  read commands from, is a csv", dest="file", type=str)
+    parser.add_argument("-file", help="Read commands from txt file", dest="file", type=str)
     args = parser.parse_args()
-
-
 
     # converts input into something readable by the Main Loop
     if args.file is not None:  # if commanded to read from file instead of directly
@@ -207,17 +197,4 @@ if __name__ == "__main__":
                 args.file) + "could not be found. Creating file now. Please insert your commands into this file")
             createFile(args.file)
         commands = readFile(args.file)  # read commands
-    else:  # if given a direct command through the command prompt
-        print(args  )
-        args = (args.__str__()[10:-1]).split(', ')  # splits the string at ',' and removes the unessisary parts
-        for i in range(len(args)):  # this loop converts the commands into a readable format for the main loop
-            args[i] = str(args[i]).split("=")  # split at '='
-            print(args)
-            if args[i][1] != 'None':  # while there are still None commands
-                args[i] = str(args[i]).replace("'", "").replace("\"", "")  # remove single quotes
-            if str(args[i][1:-1]).split(', ')[0] == "a_star" or str(args[i][1:-1]).split(', ')[0] == "beam":
-                args[i] = str("0solve " + ' '.join(str(args[i][1:-1]).split(', ')[0:]) + '0')
-            if args[i][1] != 'None':  # if not None
-                commands.append(str(args[i][1:-1]).split(', '))  # append to commands the give command
-        commands.reverse()
     commandCenter(commands)  # passes commands along to the interpreter
