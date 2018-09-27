@@ -31,7 +31,7 @@ class TicTacToe:
             error(e)
 
     # prints a visual representation of the board
-    def __str__(self):
+    def __str__(self, setting = 1):
         tile = self.State
         out = "\t{0}   |   {1}   |   {2}\n" \
               "\t-----------------\n" \
@@ -41,7 +41,10 @@ class TicTacToe:
             tile[0], tile[1], tile[2],
             tile[3], tile[4], tile[5],
             tile[6], tile[7], tile[8])
-        print(out)
+        if setting == 1:
+            print(out)
+        else:
+            return out
 
     # allows for TTT() < TTT() conparison
     def __lt__(self, other):
@@ -49,8 +52,8 @@ class TicTacToe:
 
     # Checks if the goal has been met
     def isGoal(self):
-        if self.move() is None:
-            raise Exception
+        if len(self.move()) == 0 : # if there are now moves left DRAW
+            raise Exception #signals a draw
         # Given a board and a player, this function returns True if that player has won.
         return (compare(self, 0, 1, 2) or  # across the top
                 compare(self, 3, 4, 5) or  # across the middle
@@ -66,9 +69,10 @@ class TicTacToe:
             raise ValueError("Player ID", self.Player, "is not a valid player ID, please select either 'X' or 'O'")
         if len(state) != 9:
             raise ValueError(
-                "Please format the desiered state correctly, e.g. 'b12 345 678'. Must be of length 9. "
+                "Please format the desiered state correctly, e.g. '123 456 789'. Must be of length 9. "
                 "You entered a string of length", len(state), state)
-        return True
+        else:
+            return True
 
     # Places peice at location
     def placePiece(self, location):
@@ -87,9 +91,8 @@ class TicTacToe:
         state = self.State
         for tile in range(len(state)):  # Potential_Moves = all blank "b" tiles
             if state[tile] != "X" and state[tile] != "O":  # the tile is blank
-                state[tile] = self.Player
                 moves.append(
-                    TicTacToe(state=''.join(state), player=self.nextPlayer(), parent=self.__str__(),
+                    TicTacToe(state=''.join(state), player=self.nextPlayer(), parent=self.__str__(0),
                               depth=self.Depth + 1))  # appends instance of ttt
         return moves
 

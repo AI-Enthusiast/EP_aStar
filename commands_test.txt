@@ -1,0 +1,6 @@
+setState 123 4b5 678
+move up
+move right
+print
+maxNodes 5000
+randomizeState 30

@@ -6,7 +6,7 @@ from SlavesToTheMain import EightPuzzle as ep
 
 
 def error(errorMessage):
-    print("> ERROR:\t" + str(errorMessage))
+    print("> ERROR: " + str(errorMessage))
 
 
 # TODO finish Beam
@@ -35,7 +35,7 @@ class Beam:
                 openStates[open[state][1].State] = open[state][1]
 
             try:
-                if open[0][1].isGoal():  # if the current puzzle is the goal state
+                if open[0][1].isGoal():  # if the top puzzle is the goal state
                     open[0][1].generateSolutionPath()  # goal has been achieved
                     break
             except IndexError as e:
@@ -44,9 +44,9 @@ class Beam:
 
             while len(open) > 0:  # while there are still nodes to expand in open
                 i=len(open)
-                newBranch = open[0][1].move(0)
+                newBranch = open[0][1].move(0) #adds the puzzle to newbranch
                 for branch in range(len(newBranch)):
-                    if newBranch[branch].State not in openStates:
+                    if newBranch[branch].State not in openStates: # if it's a new branch
                         children.append(newBranch[branch])  # append all it's potential moves to chldren
 
                 open.remove(open[0])  # remove it from open
@@ -56,11 +56,11 @@ class Beam:
 
             while len(temp) > self.K:  # remove children untill it's k size
                 temp.sort(reverse=False)
-                worst = temp.pop()[1]
+                temp.pop()[1] # remove worst branches untill it's K size
             for puzzle in range(len(temp)):
-                open.append(temp[puzzle])
-            children = []
-            openStates={}
+                open.append(temp[puzzle]) # add to open
+            children = [] #reset
+            openStates={} #reset
 
 
 if __name__ == '__main__':

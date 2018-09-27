@@ -1,0 +1,3 @@
+setState 312 4b5 678
+move left
+move up

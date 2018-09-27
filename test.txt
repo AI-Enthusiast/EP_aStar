@@ -1,17 +1,5 @@
-setState 123 4b5 678
-move down
-move right
-maxNodes 5000
-randomizeState 50
-solve a-star h1
-solve a-star h2
-solve a-star h3
-solve a-star h4
-randomizeState 10
-solve beam 20
-randomize state 15et
-solve beam 15
-randomize state 20
-solve beam 10
-ttt
-solve astar
+file commands_test.txt
+file astar_test.txt
+file beam_test.txt
+file ep_test.txt
+file ttt_test.txt

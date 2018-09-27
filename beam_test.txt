@@ -1,0 +1,18 @@
+randomizeState 10
+solve beam 20
+solve beam 15
+solve beam 10
+solve beam 5
+sovle beam 1
+randomizeState 15
+solve beam 20
+solve beam 15
+solve beam 10
+solve beam 5
+sovle beam 1
+randomizeState 20
+solve beam 20
+solve beam 15
+solve beam 10
+solve beam 5
+sovle beam 1

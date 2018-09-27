@@ -11,7 +11,7 @@ from SlavesToTheMain import TicTacToe as ttt
 
 # Reports an error
 def error(errorMessage):
-    print("> ERROR:\t" + str(errorMessage))
+    print("> ERROR: " + str(errorMessage))
 
 
 # Creates a "Command.csv" file
@@ -35,18 +35,19 @@ def readFile(file):
 
 
 def playAgain():
+    print(">  Play again y/n?")
     userIn = input('>>').lower()  # splits the input at every space
     if userIn == 'n' or userIn ==  'no':
         quit()
 
 
 
-def commandCenter(commands=None):
+def commandCenter(commands=[]):
     newGame = True
     puzzle = None  # type: ep.EightPuzzle or ttt.TicTacToe
     cmd = 0  # for the number of commands
     maxNodes = 5000
-
+    test = False
     # --- MAIN LOOP --- #
     # This is all one big loop for user commands
     while True:
@@ -54,18 +55,23 @@ def commandCenter(commands=None):
             try:
                 if puzzle.isGoal():  # WIN! NEW GAME
                     puzzle = None
-                    print("> You Win! Play again y/n?")
+                    print("> You Win!")
+                    if not test:
+                        playAgain()
+
                     newGame = True
-                    playAgain()
                     continue  # goto next iteration in the loop
             except Exception:  # DRAW
-                print("> Draw! Play again y/n?")
+                print("> Draw!")
+                if not test:
+                    playAgain()
+                puzzle = None
                 newGame = True
-                playAgain()
                 continue  # goto next iteration in the loop
         if 0 == len(commands): # reset
             commands = []
             cmd = 0
+            test = False
         if len(commands)-1 >= cmd :  # if cmd is not greater than the number of commands
             userIn = str(  # replaces all the bad formatting
                 ''.join(commands[cmd])).replace(']', '').replace('[', '').replace(',', '').replace("'", '').split(' ')
@@ -78,23 +84,35 @@ def commandCenter(commands=None):
         if userIn[0] == "quit" or userIn[0] == "q":
             quit()
         elif userIn[0] == "file" or userIn[0] == "test": # if commanded to read from file instead of directly
-            if  userIn[0] == "test" or len(userIn) == 1:
-                commands= readFile("test.txt")
-                cmd = 0
-                continue
-            if not os.path.isfile(userIn[1]):  # looks for the commands
+            if userIn[0] == "test" or len(userIn) == 1:
+                test = True
+                temp = readFile("test.txt")
+                for command in range(len(temp)):
+                    commands.append(temp[command])
+                    cmd = -1
+
+            elif not os.path.isfile(userIn[1]):  # looks for the commands
                 error(str(
                     userIn[1]) + "could not be found. Creating file now. Please insert your commands into this file")
 
                 createFile(userIn[1])
             else:
-                commands = readFile(userIn[1])  # read commands
-                continue
+                temp = readFile(userIn[1])
+                if userIn[1] == 'test.txt':
+                    test = True
+                    cmd = -1
+                for command in range(len(temp)):
+                    commands.append(temp[command])
+            cmd +=1
+            continue
         elif userIn[0] == 'ttt':  # set's puzzle to ttt
             if len(userIn) == 1:
                 puzzle = ttt.TicTacToe()
             else:
-                puzzle = ttt.TicTacToe(player=userIn[1])
+                if len(userIn) >= 2: # if player and state given
+                    puzzle = ttt.TicTacToe(player=userIn[1], state=' '.join(userIn[2:]).replace(' ',''))
+                else: # if only player given
+                    puzzle = ttt.TicTacToe(player=userIn[1])
             newGame = False
         elif userIn[0] == 'state' or userIn[0] == 'setState':  # if the user commands a state
             uI = ' '.join(userIn[1:]).lower().replace(' ', '')
@@ -116,6 +134,7 @@ def commandCenter(commands=None):
             newGame = False
         elif userIn[0] == "maxNodes":
             if len(userIn) > 1:  # if there is a number provided
+                print('\t maxNodes set to', userIn[1])
                 maxNodes = int(userIn[1])
             else:
                 error("maxNodes not given a value")
@@ -203,5 +222,6 @@ if __name__ == "__main__":
             error(str(
                 args.file) + "could not be found. Creating file now. Please insert your commands into this file")
             createFile(args.file)
-        commands = readFile(args.file)  # read commands
+        else:
+            commands = readFile(args.file)  # read commands
     commandCenter(commands)  # passes commands along to the interpreter

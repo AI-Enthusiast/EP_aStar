@@ -1,0 +1,218 @@
+>> test
+
+>> file commands_test.txt
+>> setState 123 4b5 678
+	1   |   2   |   3
+	-----------------
+	4   |   b   |   5
+	-----------------
+	6   |   7   |   8
+
+
+>> file astar_test.txt
+
+>> file beam_test.txt
+
+>> file ep_test.txt
+
+>> file ttt_test.txt
+
+>> move up
+	1   |   b   |   3
+	-----------------
+	4   |   2   |   5
+	-----------------
+	6   |   7   |   8
+
+>> move right
+	1   |   3   |   b
+	-----------------
+	4   |   2   |   5
+	-----------------
+	6   |   7   |   8
+
+>> print
+	1   |   3   |   b
+	-----------------
+	4   |   2   |   5
+	-----------------
+	6   |   7   |   8
+
+>> maxNodes 5000
+	 maxNodes set to 5000
+
+>> randomizeState 30
+	3   |   7   |   1
+	-----------------
+	6   |   4   |   2
+	-----------------
+	b   |   8   |   5
+
+>> randomizeState 50
+	4   |   3   |   b
+	-----------------
+	7   |   2   |   1
+	-----------------
+	6   |   8   |   5
+
+>> solve a-star h1
+f(x) = h1(x) + inversions(x)
+Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
+Number of moves: 12
+Total nodes explored: 147
+Time to solve: 0.3929438359919004 seconds
+
+>> solve a-star h2
+f(x) = h2(x) + inversions(x)
+Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
+Number of moves: 12
+Total nodes explored: 22
+Time to solve: 0.04234621100476943 seconds
+
+>> solve a-star h3
+f(x) = inversions(x) + depth(x)
+Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
+Number of moves: 12
+Total nodes explored: 127
+Time to solve: 0.2446392269921489 seconds
+
+>> solve a-star h4
+f(x) = h1(x) + h2(x) + inversions(x) + depth(x)
+Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
+Number of moves: 12
+Total nodes explored: 147
+Time to solve: 0.6973296600044705 seconds
+
+>> randomizeState 10
+	1   |   4   |   2
+	-----------------
+	3   |   b   |   5
+	-----------------
+	6   |   7   |   8
+
+>> solve beam 20
+Up --> Left
+Time to solve: 0.0015674610040150583 seconds
+
+>> solve beam 15
+Up --> Left --> Left --> Up
+Time to solve: 0.0015413730288855731 seconds
+
+>> solve beam 10
+Up --> Left --> Up --> Left --> Left --> Up
+Time to solve: 0.005650536011671647 seconds
+
+>> solve beam 5
+Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up
+Time to solve: 0.0032963340054266155 seconds
+
+>> sovle beam 1
+
+>> randomizeState 15
+	1   |   5   |   4
+	-----------------
+	b   |   3   |   8
+	-----------------
+	6   |   2   |   7
+
+>> solve beam 20
+Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up
+Time to solve: 0.26864354801364243 seconds
+
+>> solve beam 15
+Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right
+Time to solve: 0.16481741500319913 seconds
+
+>> solve beam 10
+Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right
+Time to solve: 0.10294425499159843 seconds
+
+>> solve beam 5
+Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right
+Time to solve: 0.06114506200538017 seconds
+
+>> sovle beam 1
+
+>> randomizeState 20
+	b   |   2   |   5
+	-----------------
+	1   |   3   |   4
+	-----------------
+	6   |   7   |   8
+
+>> solve beam 20
+Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right
+Time to solve: 0.04374918801477179 seconds
+
+>> solve beam 15
+Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Left --> Up --> Right --> Right --> Down
+Time to solve: 0.06907503001275472 seconds
+
+>> solve beam 10
+Down --> Right --> Right --> Up --> Left --> Left --> Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Left --> Up --> Right --> Right --> Down
+Time to solve: 0.03301660198485479 seconds
+
+>> solve beam 5
+Down --> Right --> Right --> Up --> Left --> Left --> Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Left --> Up --> Right --> Right --> Down --> Left --> Left --> Up --> Right --> Right --> Down
+Time to solve: 0.02216180702089332 seconds
+
+>> sovle beam 1
+
+>> setState 312 4b5 678
+	3   |   1   |   2
+	-----------------
+	4   |   b   |   5
+	-----------------
+	6   |   7   |   8
+
+>> move left
+	3   |   1   |   2
+	-----------------
+	b   |   4   |   5
+	-----------------
+	6   |   7   |   8
+
+>> move up
+	b   |   1   |   2
+	-----------------
+	3   |   4   |   5
+	-----------------
+	6   |   7   |   8
+> You Win!
+
+>> ttt
+	1   |   2   |   3
+	-----------------
+	4   |   5   |   6
+	-----------------
+	7   |   8   |   9
+
+>> move 1
+	O   |   2   |   3
+	-----------------
+	4   |   5   |   6
+	-----------------
+	7   |   8   |   9
+
+>> move 5
+	O   |   2   |   3
+	-----------------
+	4   |   O   |   6
+	-----------------
+	7   |   8   |   9
+
+>> move 9
+	O   |   2   |   3
+	-----------------
+	4   |   O   |   6
+	-----------------
+	7   |   8   |   O
+> You Win!
+
+>> ttt X OXO XOX XOX
+	O   |   X   |   O
+	-----------------
+	X   |   O   |   X
+	-----------------
+	X   |   O   |   X
+> Draw!
