@@ -8,7 +8,7 @@ from SlavesToTheMain import TicTacToe as ttt
 
 
 def error(errorMessage):
-    print(">ERROR:\t" + str(errorMessage))
+    print("> ERROR:\t" + str(errorMessage))
 
 
 class AStar:

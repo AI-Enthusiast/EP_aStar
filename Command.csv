@@ -1,1 +1,1 @@
-randomizeState 100,solve aStar h1,solve aStar h2,solve aStar h3,solve aStar h4,randomizeState 10,solve beam 20, randomize state 15, solve beam 15, randomize state 20, solve beam 10,
+randomizeState 100,solve aStar h1,solve aStar h2,solve aStar h3,solve aStar h4,randomizeState 10,solve beam 20, randomize state 15, solve beam 15, randomize state 20, solve beam 10, ttt, solve astar

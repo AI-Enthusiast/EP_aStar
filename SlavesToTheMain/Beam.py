@@ -6,7 +6,7 @@ from SlavesToTheMain import EightPuzzle as ep
 
 
 def error(errorMessage):
-    print(">ERROR:\t" + str(errorMessage))
+    print("> ERROR:\t" + str(errorMessage))
 
 
 # TODO finish Beam

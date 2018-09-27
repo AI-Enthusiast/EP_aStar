@@ -10,7 +10,7 @@ goal = ['b', '1', '2', '3', '4', '5', '6', '7', '8']
 
 
 def error(errorMessage):
-    print(">ERROR:\t" + str(errorMessage))
+    print("> ERROR:\t" + str(errorMessage))
 
 
 class EightPuzzle:

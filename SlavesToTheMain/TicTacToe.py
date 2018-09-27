@@ -10,7 +10,7 @@ random.seed(13)
 
 
 def error(errorMessage):
-    print(">ERROR:\t" + str(errorMessage))
+    print("> ERROR:\t" + str(errorMessage))
 
 
 class TicTacToe:

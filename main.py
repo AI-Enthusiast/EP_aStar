@@ -11,26 +11,26 @@ from SlavesToTheMain import TicTacToe as ttt
 
 # Reports an error
 def error(errorMessage):
-    print(">ERROR:\t" + str(errorMessage))
+    print("> ERROR:\t" + str(errorMessage))
 
 
 # Creates a "Command.csv" file
-def createFile():
-    with open("Command.csv", 'w', newline='\n', encoding='utf8') as csvfile:
-        csvfile.close()
+def createFile(file):
+    f= open(file, 'w+', newline='\n', encoding='utf8')
+    f.close()
 
 
 # Reads commandCenter from "Command.csv"
-def readFile():
-    with open("Command.csv", "r", newline='', encoding='utf8') as csvfile:
-        DataReader = csv.reader(csvfile, delimiter=",", quotechar=" ")
+def readFile(file):
+    with open(file, "r", newline='', encoding='utf8') as csvfile:
+        DataReader = csv.reader(csvfile, delimiter="\n", quotechar=" ")
         start, out = [], []  # you're beautiful (shhh it's a secret)
         for item in DataReader:
             start.append(item)
         csvfile.close()
         for index in range(len(start[0])):
-            out.append([start[0][index]])
-        return out
+            out.append(start[0][index])
+        return start[0]
 
 
 def playAgain():
@@ -41,26 +41,41 @@ def playAgain():
         print("> Please enter a starting state 'state <state>' or type 'state' for a random state")
 
 
-def commandCenter(commands):
+def commandCenter(commands=None):
     newGame = True
     puzzle = None  # the puzzle being opporated on
-    cmd = 0  # for the main loop
+    cmd = 0  # for the number of commands
     maxNodes = 5000
 
     # --- MAIN LOOP --- #
     # This is all one big loop for user commands
     while True:
-        if cmd <= len(commands) - 1:  # if cmd is not greater than the number of commands
+        if len(commands)-1 >= cmd :  # if cmd is not greater than the number of commands
+            print(commands) #TEMP
             userIn = str(  # replaces all the bad formatting
-                ' '.join(commands[cmd]).replace(']', '').replace('[', '').replace(',', '').replace("'", '')).split(' ')
+                ''.join(commands[cmd])).replace(']', '').replace('[', '').replace(',', '').replace("'", '').split(' ')
+            print(userIn) #TEMP
             print("\n>>", ' '.join(userIn).replace(']', '').replace('[', '').replace(',', '').replace("'", ''))
+            if cmd == len(commands): # reset
+                commands = []
+                cmd = 0
         else:  # once the initiated commands are done, prompt the user for more commands
             if newGame:
                 print("> Please enter a starting state value by typing setState <state> or random <number>, or"
-                      "to start a game of TicTacToe(Extra Credit) ")
+                      " to start a game of TicTacToe(Extra Credit) ")
             userIn = input("\n>> ").split(' ')
         if userIn[0] == "quit" or userIn[0] == "q":
             quit()
+        elif userIn[0] == "file": # if commanded to read from file instead of directly
+
+
+            if not os.path.isfile(userIn[1]):  # looks for the commands
+                error(str(
+                    userIn[1]) + "could not be found. Creating file now. Please insert your commands into this file")
+                createFile(userIn[1])
+            else:
+                commands = readFile(userIn[1])  # read commands
+                continue
         elif userIn[0] == 'ttt':  # set's puzzle to ttt
             puzzle = ttt.TicTacToe(player=userIn[1])
             newGame = False
@@ -181,22 +196,15 @@ if __name__ == "__main__":
     parser.add_argument("-file", help="The file to  read commands from, is a csv", dest="file", type=str)
     args = parser.parse_args()
 
-    # converts input into something readable by the Main Loop
-    if args.file is not None:  # if commanded to read from file instead of directly
-        if not os.path.isfile(args.file):  # looks for the commands
-            error(str(
-                args.file) + "could not be found. Creating file now. Please insert your commands into this file")
-            createFile()
-        commands = readFile()  # read commands
-    else:  # if given a direct command through the command prompt
-        args = (args.__str__()[10:-1]).split(', ')  # splits the string at ',' and removes the unessisary parts
-        for i in range(len(args)):  # this loop converts the commands into a readable format for the main loop
-            args[i] = str(args[i]).split("=")  # split at '='
-            if args[i][1] != 'None':  # while there are still None commands
-                args[i] = str(args[i]).replace("'", "").replace("\"", "")  # remove single quotes
-            if str(args[i][1:-1]).split(', ')[0] == "a_star" or str(args[i][1:-1]).split(', ')[0] == "beam":
-                args[i] = str("0solve " + ' '.join(str(args[i][1:-1]).split(', ')[0:]) + '0')
-            if args[i][1] != 'None':  # if not None
-                commands.append(str(args[i][1:-1]).split(', '))  # append to commands the give command
-        commands.reverse()
+
+    args = (args.__str__()[10:-1]).split(', ')  # splits the string at ',' and removes the unessisary parts
+    for i in range(len(args)):  # this loop converts the commands into a readable format for the main loop
+        args[i] = str(args[i]).split("=")  # split at '='
+        if args[i][1] != 'None':  # while there are still None commands
+            args[i] = str(args[i]).replace("'", "").replace("\"", "")  # remove single quotes
+        if str(args[i][1:-1]).split(', ')[0] == "a_star" or str(args[i][1:-1]).split(', ')[0] == "beam":
+            args[i] = str("0solve " + ' '.join(str(args[i][1:-1]).split(', ')[0:]) + '0')
+        if args[i][1] != 'None':  # if not None
+            commands.append(str(args[i][1:-1]).split(', '))  # append to commands the give command
+    commands.reverse()
     commandCenter(commands)  # passes commands along to the interpreter
