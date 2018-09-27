@@ -28,9 +28,10 @@ def readFile(file):
         for item in DataReader:
             start.append(item)
         csvfile.close()
-        for index in range(len(start[0])):
-            out.append(start[0][index])
-        return start[0]
+        # print(start)
+        # for index in range(len(start)):
+        #     out.append(start[0][index])
+        return start
 
 
 def playAgain():
@@ -51,10 +52,8 @@ def commandCenter(commands=None):
     # This is all one big loop for user commands
     while True:
         if len(commands)-1 >= cmd :  # if cmd is not greater than the number of commands
-            print(commands) #TEMP
             userIn = str(  # replaces all the bad formatting
                 ''.join(commands[cmd])).replace(']', '').replace('[', '').replace(',', '').replace("'", '').split(' ')
-            print(userIn) #TEMP
             print("\n>>", ' '.join(userIn).replace(']', '').replace('[', '').replace(',', '').replace("'", ''))
             if cmd == len(commands): # reset
                 commands = []
@@ -66,9 +65,10 @@ def commandCenter(commands=None):
             userIn = input("\n>> ").split(' ')
         if userIn[0] == "quit" or userIn[0] == "q":
             quit()
-        elif userIn[0] == "file": # if commanded to read from file instead of directly
-
-
+        elif userIn[0] == "file" or userIn[0] == "test": # if commanded to read from file instead of directly
+            if  userIn[0] == "test":
+                commands= readFile("test.txt")
+                continue
             if not os.path.isfile(userIn[1]):  # looks for the commands
                 error(str(
                     userIn[1]) + "could not be found. Creating file now. Please insert your commands into this file")

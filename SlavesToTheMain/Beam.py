@@ -45,7 +45,6 @@ class Beam:
 
             while len(open) > 0:  # while there are still nodes to expand in open
                 i=len(open)
-                print(open)
                 newBranch = open[0][1].move(0)
                 for branch in range(len(newBranch)):
                     if newBranch[branch].State not in openStates:
