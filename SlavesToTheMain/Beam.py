@@ -3,10 +3,13 @@
 # Author: Cormac Dacker (cxd289)
 from SlavesToTheMain import TicTacToe as ttt
 from SlavesToTheMain import EightPuzzle as ep
+
+
 def error(errorMessage):
     print(">ERROR:\t" + str(errorMessage))
 
-#TODO finish Beam
+
+# TODO finish Beam
 class Beam:
 
     # Constructor
@@ -18,51 +21,48 @@ class Beam:
 
     def f(self, puzzle):
         if type(puzzle) is ep.EightPuzzle:
-            return puzzle.euclidianDist() + puzzle.Depth
+            return puzzle.euclidianDist() + puzzle.inversions()
         elif type(puzzle) is ttt.TicTacToe:
             return puzzle.h1() + puzzle.Depth
 
-    def chooseBranch(self, open,closed):
-        funcHeap=[]
-        for branch in range(len(open)):  # build the queue
-            if str(open[branch].State) not in closed:
-                funcHeap.append((self.f(open[branch]), open[branch]))  # pushes info to the queue
-        funcHeap.sort(reverse=True)
-        return funcHeap
-
     def beam(self, puzzle):
-        goal = False
-        open, closed = [], {}  # nodes to visit, nodes to not visit
-        children = []  # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # childern of that branch
-        if puzzle.isGoal():  # if the current puzzle is the goal state
-            puzzle.generateSolutionPath()  # goal has been achieved
-        else:  # work toward the goal
-            open.append(puzzle)  # add the starting puzzle to open
-            while True:
-                print("open",open)
-                print("children", children)
+        children = []  # nodes to visit, nodes to not visit
+        open = [(self.f(puzzle),
+                 puzzle)]  # type: List[tuple(int, ep.EightPuzzle)] or List[[tuple(int, ttt.TicTacToe)]] # childern of that branch
+        openStates = {}
+        while True:  # work toward the goal
+            open.sort()
+            for state in range(len(open)):
+                openStates[open[state][1].State] = open[state][1]
 
-                while open is not None:  # while there are still nodes to expand in open
-                    for child in range(len(open)): # for each puzzle in open
-                        children.append(open(child).move) #append all it's potential moves to chldren
-                        open.remove(open[child])  # remove it from open
-                        closed[open[child].State] = open[child] # add it to closed
-                children.sort()
-                while len(children) > self.K: # remove children untill it's k size
-                    children.pop()
-                open = children.sort(reverse=True)
-                children = None
+            try:
+                if open[0][1].isGoal():  # if the current puzzle is the goal state
+                    open[0][1].generateSolutionPath()  # goal has been achieved
+                    break
+            except IndexError as e:
+                error(str(e) + "K param too low, please increase.")
+                break
 
-                #     stems = (self.chooseBranch(open,closed)) # type: List[ep.EightPuzzle] or List[ttt.TicTacToe] # get childern of that branch
-                #     for i in range(len(stems)):
-                #         children.append(stems[i])
-                #     closed[children[0].State] = children[0] # add the chosen branch to the closed table
-                #     open.remove(children[0])  # remove the branch from open
-                #     if branch[0].isGoal():
-                #         print("TEMP")
-                # open.append(children)
-                # while len(open) > self.K:
-                #     open.pop()
+            while len(open) > 0:  # while there are still nodes to expand in open
+                i=len(open)
+                print(open)
+                newBranch = open[0][1].move(0)
+                for branch in range(len(newBranch)):
+                    if newBranch[branch].State not in openStates:
+                        children.append(newBranch[branch])  # append all it's potential moves to chldren
+
+                open.remove(open[0])  # remove it from open
+            temp = []
+            for child in range(len(children)):
+                temp.append((self.f(children[child]), children[child]))
+
+            while len(temp) > self.K:  # remove children untill it's k size
+                temp.sort(reverse=False)
+                worst = temp.pop()[1]
+            for puzzle in range(len(temp)):
+                open.append(temp[puzzle])
+            children = []
+            openStates={}
 
 
 if __name__ == '__main__':
