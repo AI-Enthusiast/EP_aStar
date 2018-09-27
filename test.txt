@@ -2,7 +2,7 @@ setState 123 4b5 678
 move down
 move right
 maxNodes 5000
-randomizeState 100
+randomizeState 50
 solve a-star h1
 solve a-star h2
 solve a-star h3

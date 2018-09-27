@@ -4,7 +4,6 @@
 # TODO Create heuristic function
 # TODO flip btw turns
 import random
-from typing import List
 
 random.seed(13)
 
@@ -75,7 +74,6 @@ class TicTacToe:
     def placePiece(self, location):
         self.State[location] = self.Player
 
-
     # Get's the next player to play
     def nextPlayer(self):
         if self.Player == "X":
@@ -105,17 +103,37 @@ class TicTacToe:
             path.append(self.Parent[0])
             return self.Parent[1].generateSolutionPath(path)  # recursively self call for path
 
+    # counts the number of open lines
+    def numLinesOpen(self):
+        linesOpen = 0
+        linesOpen += compare(self, 0, 1, 2, 1)  # across the top
+        linesOpen += compare(self, 3, 4, 5, 1)  # across the middle
+        linesOpen += compare(self, 6, 7, 8, 1)  # across the bottom
+        linesOpen += compare(self, 0, 3, 6, 1)  # down the left side
+        linesOpen += compare(self, 1, 4, 7, 1)  # down the middle
+        linesOpen += compare(self, 2, 5, 8, 1)  # down the right side
+        linesOpen += compare(self, 0, 4, 8, 1)  # diagonal left down to right
+        linesOpen += compare(self, 2, 4, 6, 1)
+        return linesOpen
+
     def h1(self):
-        if self.move() is None:
-            return 0
-        if self.isGoal():
-            return 1
+        print("TEMP")
+        # num of open lines - num of oppt open lines
+
 
 # Compares there tile locations to see if it's a win
-def compare(puzzle, x, y, z):
+# x, y, z are tile locations
+# setting 0 checks if it's a win, 1 checks if the line is open
+def compare(puzzle, x, y, z, setting=0):
     board = puzzle.State
     player = puzzle.Player
-    return board[x] == player and board[y] == player and board[z] == player
+    if (setting == 0):
+        return board[x] == player and board[y] == player and board[z] == player
+    else:
+        if board[x] != puzzle.nextPlayer() and board[y] != puzzle.nextPlayer() and board[z] != puzzle.nextPlayer():
+            return -1
+        else:
+            return 1
 
 
 if __name__ == '__main__':

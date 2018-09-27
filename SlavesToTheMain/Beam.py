@@ -22,7 +22,7 @@ class Beam:
         if type(puzzle) is ep.EightPuzzle:
             return puzzle.euclidianDist() + puzzle.inversions()
         elif type(puzzle) is ttt.TicTacToe:
-            return puzzle.h1() + puzzle.Depth
+            return puzzle.numLinesOpen() + puzzle.Depth
 
     def beam(self, puzzle):
         children = []  # nodes to visit, nodes to not visit

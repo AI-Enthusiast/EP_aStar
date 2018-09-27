@@ -43,7 +43,7 @@ def playAgain():
 
 def commandCenter(commands=None):
     newGame = True
-    puzzle = None  # the puzzle being opporated on
+    puzzle = None  # type: ep.EightPuzzle or ttt.TicTacToe
     cmd = 0  # for the number of commands
     maxNodes = 5000
 
@@ -63,14 +63,13 @@ def commandCenter(commands=None):
                 newGame = True
                 playAgain()
                 continue  # goto next iteration in the loop
-
+        if 0 == len(commands): # reset
+            commands = []
+            cmd = 0
         if len(commands)-1 >= cmd :  # if cmd is not greater than the number of commands
             userIn = str(  # replaces all the bad formatting
                 ''.join(commands[cmd])).replace(']', '').replace('[', '').replace(',', '').replace("'", '').split(' ')
             print("\n>>", ' '.join(userIn).replace(']', '').replace('[', '').replace(',', '').replace("'", ''))
-            if cmd == len(commands): # reset
-                commands = []
-                cmd = 0
         else:  # once the initiated commands are done, prompt the user for more commands
             if newGame:
                 print("> Please enter a starting state value by typing setState <state> or random <number>, or"
@@ -79,18 +78,23 @@ def commandCenter(commands=None):
         if userIn[0] == "quit" or userIn[0] == "q":
             quit()
         elif userIn[0] == "file" or userIn[0] == "test": # if commanded to read from file instead of directly
-            if  userIn[0] == "test":
+            if  userIn[0] == "test" or len(userIn) == 1:
                 commands= readFile("test.txt")
+                cmd = 0
                 continue
             if not os.path.isfile(userIn[1]):  # looks for the commands
                 error(str(
                     userIn[1]) + "could not be found. Creating file now. Please insert your commands into this file")
+
                 createFile(userIn[1])
             else:
                 commands = readFile(userIn[1])  # read commands
                 continue
         elif userIn[0] == 'ttt':  # set's puzzle to ttt
-            puzzle = ttt.TicTacToe(player=userIn[1])
+            if len(userIn) == 1:
+                puzzle = ttt.TicTacToe()
+            else:
+                puzzle = ttt.TicTacToe(player=userIn[1])
             newGame = False
         elif userIn[0] == 'state' or userIn[0] == 'setState':  # if the user commands a state
             uI = ' '.join(userIn[1:]).lower().replace(' ', '')
@@ -158,6 +162,8 @@ def commandCenter(commands=None):
                             print("> Please enter a valid move, eg: 'move left'")
                     except UnboundLocalError:
                         error("You can't go that way")
+                        if cmd <= len(commands):  # if cmd is not greater than the number of commands
+                            cmd += 1  # incrememnt command
                         continue
                     puzzle.__str__()
             elif type(puzzle) is ttt.TicTacToe:
@@ -166,6 +172,8 @@ def commandCenter(commands=None):
                         puzzle.placePiece(int(userIn[1]) - 1)
                     except IndexError:
                         error("Please enter a valid location")
+                        if cmd <= len(commands):  # if cmd is not greater than the number of commands
+                            cmd += 1  # incrememnt command
                         continue
                     puzzle.__str__()
             else:
