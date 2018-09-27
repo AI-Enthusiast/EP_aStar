@@ -3,10 +3,10 @@ move down
 move right
 maxNodes 5000
 randomizeState 100
-solve aStar h1
-solve aStar h2
-solve aStar h3
-solve aStar h4
+solve a-star h1
+solve a-star h2
+solve a-star h3
+solve a-star h4
 randomizeState 10
 solve beam 20
 randomize state 15et

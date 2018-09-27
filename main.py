@@ -131,8 +131,7 @@ def commandCenter(commands=None):
                         AStar.AStar(maxNodes, puzzle, heuristic=userIn[2])  # takes puzzle, heuristic, and maxNodes
                 elif userIn[1] == "beam":  # Beam stylepuzz
                     if len(userIn) < 3:
-                        error("Please provide a k for beam")
-                        continue
+                        Beam.Beam(puzzle)
                     Beam.Beam(puzzle, userIn[2])  # takes puzzle and k value
                 stop = timeit.default_timer()  # stop the timer
                 print("Time to solve:", stop - start, "seconds")  # print time

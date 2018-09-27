@@ -14,9 +14,8 @@ class Beam:
 
     # Constructor
     # Params: puzzle(the puzzle being solved), k(number of states being kept track of)
-    def __init__(self, puzzle, k=3, first=1):
+    def __init__(self, puzzle, k=35):
         self.K = int(k)
-        self.First = first
         self.beam(puzzle)  # print aStar solution
 
     def f(self, puzzle):
