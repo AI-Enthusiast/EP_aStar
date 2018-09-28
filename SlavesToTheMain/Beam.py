@@ -26,6 +26,7 @@ class Beam:
         elif type(puzzle) is ttt.TicTacToe:
             return puzzle.numLinesOpen + puzzle.Depth
 
+    # Beam Baby!
     def beam(self, puzzle):
         numClosed = 0
         children = []  # nodes to visit, nodes to not visit
