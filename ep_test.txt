@@ -1,3 +1,5 @@
+alert Begin EightPuzzle testing:
+alert Proof of solve:
 setState 312 4b5 678
 move left
 move up

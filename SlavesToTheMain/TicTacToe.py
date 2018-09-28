@@ -31,7 +31,7 @@ class TicTacToe:
             error(e)
 
     # prints a visual representation of the board
-    def __str__(self, setting = 1):
+    def __str__(self, setting=1):
         tile = self.State
         out = "\t{0}   |   {1}   |   {2}\n" \
               "\t-----------------\n" \
@@ -52,8 +52,8 @@ class TicTacToe:
 
     # Checks if the goal has been met
     def isGoal(self):
-        if len(self.move()) == 0 : # if there are now moves left DRAW
-            raise Exception #signals a draw
+        if len(self.move()) == 0:  # if there are now moves left DRAW
+            raise Exception  # signals a draw
         # Given a board and a player, this function returns True if that player has won.
         return (compare(self, 0, 1, 2) or  # across the top
                 compare(self, 3, 4, 5) or  # across the middle
@@ -107,6 +107,7 @@ class TicTacToe:
             return self.Parent[1].generateSolutionPath(path)  # recursively self call for path
 
     # counts the number of open lines
+    @property
     def numLinesOpen(self):
         linesOpen = 0
         linesOpen += compare(self, 0, 1, 2, 1)  # across the top
@@ -119,10 +120,6 @@ class TicTacToe:
         linesOpen += compare(self, 2, 4, 6, 1)
         return linesOpen
 
-    def h1(self):
-        print("TEMP")
-        # num of open lines - num of oppt open lines
-
 
 # Compares there tile locations to see if it's a win
 # x, y, z are tile locations
@@ -130,13 +127,13 @@ class TicTacToe:
 def compare(puzzle, x, y, z, setting=0):
     board = puzzle.State
     player = puzzle.Player
-    if (setting == 0):
+    if setting == 0:
         return board[x] == player and board[y] == player and board[z] == player
     else:
         if board[x] != puzzle.nextPlayer() and board[y] != puzzle.nextPlayer() and board[z] != puzzle.nextPlayer():
-            return -1
+            return -1  # if you or no one controlls the line
         else:
-            return 1
+            return 1  # if the line is blocked
 
 
 if __name__ == '__main__':

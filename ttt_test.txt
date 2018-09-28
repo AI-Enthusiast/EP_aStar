@@ -1,5 +1,8 @@
+alert Begin TicTacToe testing:
+alert Proof of solve:
 ttt
 move 1
 move 5
 move 9
+alert Proof of draw:
 ttt X OXO XOX XOX

@@ -1,18 +1,11 @@
-randomizeState 10
+maxNodes 2
+alert Begin Beam testing
+alert Proof of maxNodes break
 solve beam 20
-solve beam 15
-solve beam 10
-solve beam 5
-sovle beam 1
+maxNodes 5000
+alert Proof of solve
 randomizeState 15
 solve beam 20
 solve beam 15
 solve beam 10
 solve beam 5
-sovle beam 1
-randomizeState 20
-solve beam 20
-solve beam 15
-solve beam 10
-solve beam 5
-sovle beam 1

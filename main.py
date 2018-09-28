@@ -35,7 +35,7 @@ def readFile(file):
 
 
 def playAgain():
-    print(">  Play again y/n?")
+    print("> Play again y/n?")
     userIn = input('>>').lower()  # splits the input at every space
     if userIn == 'n' or userIn ==  'no':
         quit()
@@ -43,11 +43,13 @@ def playAgain():
 
 
 def commandCenter(commands=[]):
+    test = False
+    if len(commands) > 0:
+        test = True
     newGame = True
     puzzle = None  # type: ep.EightPuzzle or ttt.TicTacToe
     cmd = 0  # for the number of commands
     maxNodes = 5000
-    test = False
     # --- MAIN LOOP --- #
     # This is all one big loop for user commands
     while True:
@@ -75,6 +77,12 @@ def commandCenter(commands=[]):
         if len(commands)-1 >= cmd :  # if cmd is not greater than the number of commands
             userIn = str(  # replaces all the bad formatting
                 ''.join(commands[cmd])).replace(']', '').replace('[', '').replace(',', '').replace("'", '').split(' ')
+
+            if userIn[0] == "alert":
+                print("\n--", ' '.join(userIn[1:]).replace(']', '').replace('[', '').replace(',', '').replace("'", ''),
+                      "--")
+                cmd += 1
+                continue
             print("\n>>", ' '.join(userIn).replace(']', '').replace('[', '').replace(',', '').replace("'", ''))
         else:  # once the initiated commands are done, prompt the user for more commands
             if newGame:
@@ -154,8 +162,8 @@ def commandCenter(commands=[]):
                         AStar.AStar(maxNodes, puzzle, heuristic=userIn[2])  # takes puzzle, heuristic, and maxNodes
                 elif userIn[1] == "beam":  # Beam stylepuzz
                     if len(userIn) < 3:
-                        Beam.Beam(puzzle)
-                    Beam.Beam(puzzle, userIn[2])  # takes puzzle and k value
+                        Beam.Beam(puzzle, maxNodes=maxNodes)
+                    Beam.Beam(puzzle, userIn[2], maxNodes=maxNodes)  # takes puzzle and k value
                 stop = timeit.default_timer()  # stop the timer
                 print("Time to solve:", stop - start, "seconds")  # print time
 
@@ -199,7 +207,7 @@ def commandCenter(commands=[]):
                 error("Please enter a valid command or type 'help'")
         elif userIn[0] == 'help':  # user needs help with commands
             print("> Valid commands include 'state <state>' or 'setState <state>', the '<state>' is optional and if not"
-            " inputted will create a random state. format the <state> = 'b12345678' or 'b12 345 678'")
+                  " inputted will create a random state. format the <state> = 'b12345678' or 'b12 345 678'")
         else:
             error("Please enter a valid command or type 'help'")
         if cmd <= len(commands):  # if cmd is not greater than the number of commands

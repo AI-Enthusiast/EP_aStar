@@ -1,13 +1,7 @@
->> test
+(xenial)cormac@localhost:~/PycharmProjects/EP_aStar$ python3 main.py -file test.txt
+> Welcome, type 'q' or 'quit' to quit
 
 >> file commands_test.txt
->> setState 123 4b5 678
-	1   |   2   |   3
-	-----------------
-	4   |   b   |   5
-	-----------------
-	6   |   7   |   8
-
 
 >> file astar_test.txt
 
@@ -16,6 +10,19 @@
 >> file ep_test.txt
 
 >> file ttt_test.txt
+
+-- Begin Command testing: --
+
+-- Proof of setState: --
+
+>> setState 123 4b5 678
+	1   |   2   |   3
+	-----------------
+	4   |   b   |   5
+	-----------------
+	6   |   7   |   8
+
+-- Proof of moveing: --
 
 >> move up
 	1   |   b   |   3
@@ -31,15 +38,21 @@
 	-----------------
 	6   |   7   |   8
 
->> print
+-- Proof of print: --
+
+>> printState
 	1   |   3   |   b
 	-----------------
 	4   |   2   |   5
 	-----------------
 	6   |   7   |   8
 
+-- Proof of maxNodes: --
+
 >> maxNodes 5000
 	 maxNodes set to 5000
+
+-- Proof of randomizeState: --
 
 >> randomizeState 30
 	3   |   7   |   1
@@ -48,115 +61,110 @@
 	-----------------
 	b   |   8   |   5
 
->> randomizeState 50
-	4   |   3   |   b
-	-----------------
-	7   |   2   |   1
-	-----------------
-	6   |   8   |   5
+-- Begin Astar testing --
+
+>> randomize 10
+
+>> maxNodes 2
+	 maxNodes set to 2
+
+-- Proof of maxNodes break --
 
 >> solve a-star h1
 f(x) = h1(x) + inversions(x)
-Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
-Number of moves: 12
-Total nodes explored: 147
-Time to solve: 0.3929438359919004 seconds
+> ERROR: Max nodes exceeded
+Time to solve: 0.0002083200088236481 seconds
+
+>> maxNodes 5000
+	 maxNodes set to 5000
+
+-- Proof of solve --
+
+>> randomizeState 65
+	4   |   2   |   3
+	-----------------
+	7   |   8   |   b
+	-----------------
+	6   |   5   |   1
+
+>> solve a-star h1
+f(x) = h1(x) + inversions(x)
+Down --> Left --> Up --> Up --> Right --> Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
+Number of moves: 17
+Total nodes explored: 533
+Time to solve: 1.502686955005629 seconds
 
 >> solve a-star h2
 f(x) = h2(x) + inversions(x)
-Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
-Number of moves: 12
-Total nodes explored: 22
-Time to solve: 0.04234621100476943 seconds
+Down --> Left --> Up --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up --> Right --> Right --> Down --> Left --> Left --> Up --> Right --> Down --> Right --> Up --> Left --> Left
+Number of moves: 25
+Total nodes explored: 513
+Time to solve: 2.201187440979993 seconds
 
 >> solve a-star h3
 f(x) = inversions(x) + depth(x)
-Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
-Number of moves: 12
-Total nodes explored: 127
-Time to solve: 0.2446392269921489 seconds
+Down --> Left --> Up --> Up --> Right --> Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
+Number of moves: 17
+Total nodes explored: 669
+Time to solve: 2.083852491021389 seconds
 
 >> solve a-star h4
 f(x) = h1(x) + h2(x) + inversions(x) + depth(x)
-Down --> Left --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up
-Number of moves: 12
-Total nodes explored: 147
-Time to solve: 0.6973296600044705 seconds
+Down --> Left --> Up --> Left --> Up --> Right --> Right --> Down --> Down --> Left --> Up --> Left --> Up --> Right --> Right --> Down --> Left --> Left --> Up --> Right --> Down --> Right --> Up --> Left --> Left
+Number of moves: 25
+Total nodes explored: 279
+Time to solve: 0.7247601760027464 seconds
 
->> randomizeState 10
-	1   |   4   |   2
-	-----------------
-	3   |   b   |   5
-	-----------------
-	6   |   7   |   8
+>> maxNodes 2
+	 maxNodes set to 2
+
+-- Begin Beam testing --
+
+-- Proof of maxNodes break --
 
 >> solve beam 20
-Up --> Left
-Time to solve: 0.0015674610040150583 seconds
+> ERROR: Max nodes exceeded
+Time to solve: 0.0005653789849020541 seconds
 
->> solve beam 15
-Up --> Left --> Left --> Up
-Time to solve: 0.0015413730288855731 seconds
+>> maxNodes 5000
+	 maxNodes set to 5000
 
->> solve beam 10
-Up --> Left --> Up --> Left --> Left --> Up
-Time to solve: 0.005650536011671647 seconds
-
->> solve beam 5
-Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up
-Time to solve: 0.0032963340054266155 seconds
-
->> sovle beam 1
+-- Proof of solve --
 
 >> randomizeState 15
-	1   |   5   |   4
+	1   |   2   |   5
 	-----------------
-	b   |   3   |   8
+	3   |   4   |   8
 	-----------------
-	6   |   2   |   7
+	6   |   b   |   7
 
 >> solve beam 20
-Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up
-Time to solve: 0.26864354801364243 seconds
+Right --> Up --> Up --> Left --> Left
+Number of moves: 5
+Total nodes explored: 150
+Time to solve: 0.020265715022105724 seconds
 
 >> solve beam 15
-Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right
-Time to solve: 0.16481741500319913 seconds
+Right --> Up --> Up --> Left --> Left
+Number of moves: 5
+Total nodes explored: 119
+Time to solve: 0.014985330024501309 seconds
 
 >> solve beam 10
-Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right
-Time to solve: 0.10294425499159843 seconds
+Right --> Up --> Up --> Left --> Left
+Number of moves: 5
+Total nodes explored: 88
+Time to solve: 0.010178044001804665 seconds
 
 >> solve beam 5
-Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right
-Time to solve: 0.06114506200538017 seconds
+Right --> Up --> Up --> Left --> Left
+Number of moves: 5
+Total nodes explored: 54
+Time to solve: 0.005904780991841108 seconds
 
->> sovle beam 1
+-- Begin EightPuzzle testing: --
 
->> randomizeState 20
-	b   |   2   |   5
-	-----------------
-	1   |   3   |   4
-	-----------------
-	6   |   7   |   8
-
->> solve beam 20
-Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right
-Time to solve: 0.04374918801477179 seconds
-
->> solve beam 15
-Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Left --> Up --> Right --> Right --> Down
-Time to solve: 0.06907503001275472 seconds
-
->> solve beam 10
-Down --> Right --> Right --> Up --> Left --> Left --> Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Up --> Left --> Down --> Right --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Left --> Up --> Right --> Right --> Down
-Time to solve: 0.03301660198485479 seconds
-
->> solve beam 5
-Down --> Right --> Right --> Up --> Left --> Left --> Down --> Right --> Right --> Up --> Left --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Right --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Left --> Up --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Left --> Up --> Left --> Left --> Up --> Right --> Down --> Left --> Up --> Up --> Right --> Down --> Right --> Left --> Up --> Left --> Down --> Right --> Up --> Left --> Up --> Right --> Down --> Right --> Left --> Left --> Up --> Right --> Right --> Down --> Left --> Left --> Up --> Right --> Right --> Down
-Time to solve: 0.02216180702089332 seconds
-
->> sovle beam 1
+-- Proof of solve: --
 
 >> setState 312 4b5 678
 	3   |   1   |   2
@@ -179,6 +187,10 @@ Time to solve: 0.02216180702089332 seconds
 	-----------------
 	6   |   7   |   8
 > You Win!
+
+-- Begin TicTacToe testing: --
+
+-- Proof of solve: --
 
 >> ttt
 	1   |   2   |   3
@@ -208,6 +220,8 @@ Time to solve: 0.02216180702089332 seconds
 	-----------------
 	7   |   8   |   O
 > You Win!
+
+-- Proof of draw: --
 
 >> ttt X OXO XOX XOX
 	O   |   X   |   O

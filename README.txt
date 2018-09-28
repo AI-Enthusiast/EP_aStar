@@ -17,13 +17,13 @@ or
 		quit/q : to quit
 		file FILE : to read from specified file
 		test : to run test file commands
-		randomizeState N : where N is the number of moves random moves made. Default N = 42
-		maxNodes N : where N is the number of max nodes
+		randomizeState N : where N is the number of moves random moves made; Default = 42
+		maxNodes N : where N is the number of max nodes; Default = 5000
 		print/printState : to print the current state
 		move DIRECTION : where DIRECTION is a codinal direction "up,down,left,right"
 		solve astar H : where H is a heuristic function, "h1-h4"
 		solve beam K : where K is the number of nodes to be considered at a time
-		ttt PLAYER : to initialize a game of ttt where PLAYER is either 'X' or 'O', Default PLAYER = 'X'
+		ttt PLAYER : to initialize a game of ttt where PLAYER is either 'X' or 'O'; Default = 'X'
 EXTRA CREDIT:
 1. Once all your commands have run and you are directly interacting with the script, input "ttt <player (either 'X' or 'O")>" to initiallize a game of ttt.
 2. You are playing against the computer

@@ -1,4 +1,11 @@
-randomizeState 50
+alert Begin Astar testing
+randomize 10
+maxNodes 2
+alert Proof of maxNodes break
+solve a-star h1
+maxNodes 5000
+alert Proof of solve
+randomizeState 65
 solve a-star h1
 solve a-star h2
 solve a-star h3

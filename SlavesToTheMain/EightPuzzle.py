@@ -119,21 +119,6 @@ class EightPuzzle:
                 self.B = i  # new B's location
                 break
 
-    # Swaps the location of the b tile with y
-    # setting ( 0 = return states instead of setting them, 1 = set states at each move)
-    def swap(self, b, y, direction=None, setting=1):
-        state = list(self.State)
-        # performs a switch
-        temp = state[y]
-        state[y] = state[b]
-        state[b] = temp
-        # update B's location
-        if setting == 1:
-            self.B = y
-            self.State = str(''.join(state))
-        else:
-            return EightPuzzle(state=str(''.join(state)), parent=(direction, self), b=y, depth=self.Depth + 1)
-
     # Moves the tile up, down, left, right
     # setting ( 0 = return states instead of setting them, 1 = set states at each move)
     # the setting in this case is just to pass it along to lower level helpers
@@ -262,10 +247,10 @@ def moveUp(puzzle, setting=1):
         raise UnboundLocalError
     else:
         if setting == 1:  # set move to current state
-            puzzle.swap(puzzle.B, puzzle.B - 3, setting)
+            swap(puzzle, puzzle.B, puzzle.B - 3, setting)
 
         else:  # return the node made from moving
-            return puzzle.swap(puzzle.B, puzzle.B - 3, "Up", setting)
+            return swap(puzzle, puzzle.B, puzzle.B - 3, "Up", setting)
 
 
 # Moves the blank tile down
@@ -275,9 +260,9 @@ def moveDown(puzzle, setting=1):
         raise UnboundLocalError
     else:
         if setting == 1:  # set move to current state
-            puzzle.swap(puzzle.B, puzzle.B + 3, setting)
+            swap(puzzle, puzzle.B, puzzle.B + 3, setting)
         else:  # return the node made from moving
-            return puzzle.swap(puzzle.B, puzzle.B + 3, "Down", setting)
+            return swap(puzzle, puzzle.B, puzzle.B + 3, "Down", setting)
 
 
 # Moves the blank tile left
@@ -287,9 +272,9 @@ def moveLeft(puzzle, setting=1):
         raise UnboundLocalError
     else:
         if setting == 1:  # set move to current state
-            puzzle.swap(puzzle.B, puzzle.B - 1, setting)
+            swap(puzzle, puzzle.B, puzzle.B - 1, setting)
         else:  # return the node made from moving
-            return puzzle.swap(puzzle.B, puzzle.B - 1, "Left", setting)
+            return swap(puzzle, puzzle.B, puzzle.B - 1, "Left", setting)
 
 
 # Moves the blank tile right
@@ -299,10 +284,25 @@ def moveRight(puzzle, setting=1):
         raise UnboundLocalError
     else:
         if setting == 1:  # set move to current state
-            puzzle.swap(puzzle.B, puzzle.B + 1, setting)
+            swap(puzzle, puzzle.B, puzzle.B + 1, setting)
         else:  # return the node made from moving
-            return puzzle.swap(puzzle.B, puzzle.B + 1, "Right", setting)
+            return swap(puzzle, puzzle.B, puzzle.B + 1, "Right", setting)
 
+
+# Swaps the location of the b tile with y
+# setting ( 0 = return states instead of setting them, 1 = set states at each move)
+def swap(puzzle, b, y, direction=None, setting=1):
+    state = list(puzzle.State)
+    # performs a switch
+    temp = state[y]
+    state[y] = state[b]
+    state[b] = temp
+    # update B's location
+    if setting == 1:
+        puzzle.B = y
+        puzzle.State = str(''.join(state))
+    else:
+        return EightPuzzle(state=str(''.join(state)), parent=(direction, puzzle), b=y, depth=puzzle.Depth + 1)
 
 if __name__ == '__main__':
     error("Please run from 'main.py'")

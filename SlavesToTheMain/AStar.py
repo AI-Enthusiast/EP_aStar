@@ -31,7 +31,7 @@ class AStar:
     # The heuristic function
     def f(self, puzzle):
         if type(puzzle) is ttt.TicTacToe: # TTT heuristic function
-            return puzzle.numLinesOpen()
+            return puzzle.numLinesOpen
         elif self.H == 'h1':
             return puzzle.h1() + puzzle.inversions() + puzzle.Depth
         elif self.H == 'h2':
