@@ -5,6 +5,8 @@
 # TODO flip btw turns
 import random
 
+from SlavesToTheMain import AStar
+
 random.seed(13)
 
 
@@ -25,9 +27,11 @@ class TicTacToe:
                 if self.validState(state):
                     self.State = list(state.replace(' ', ''))  # finally sets the state to State for one dimention
                     self.__str__()
+                    self.Turn = random.randint(0, 1)
+                # self.turn()
             else:  # we don't need to validate it if it has a parent. it must be originating from a valid state.
                 self.State = list(state.replace(' ', ''))  # finally sets the state to State for one dimention
-        except ValueError and TypeError as e:  # if you gave a screwy state
+        except ValueError as e:  # if you gave a screwy state
             error(e)
 
     # prints a visual representation of the board
@@ -49,6 +53,27 @@ class TicTacToe:
     # allows for TTT() < TTT() conparison
     def __lt__(self, other):
         return self.__hash__() < other.__hash__()
+
+    def turn(self):
+        while not self.isGoal():
+            if self.Turn % 2:
+                print("\t> It's your turn")
+                move = int(input(">> move "))
+                try:
+                    self.placePiece(move)
+                    self.Turn += 1
+                except IndexError as e:
+                    error("Please enter a valid location")
+            else:
+                print("\t> Computer's turn")
+                open = self.move()
+                puzzle = AStar.AStar(9, self)
+                #   print(puzzle.chooseBranch(open,{}))
+                print("Maybe oneday I'll finish this")
+                quit()
+        self.generateSolutionPath()
+
+
 
     # Checks if the goal has been met
     def isGoal(self):
@@ -75,8 +100,10 @@ class TicTacToe:
             return True
 
     # Places peice at location
-    def placePiece(self, location):
-        self.State[location] = self.Player
+    def placePiece(self, location, player=None):
+        if player == None:
+            player = self.Player
+        self.State[location] = player
 
     # Get's the next player to play
     def nextPlayer(self):

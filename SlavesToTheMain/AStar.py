@@ -26,7 +26,8 @@ class AStar:
             print("f(x) = h1(x) + h2(x) + inversions(x) + depth(x)")
         else:
             raise ValueError("Please enter a valid heuristic for A*. Either 'h1','h2','h3', or 'h4'")
-        self.aStar(puzzle, maxNodes)  # print aStar solution
+        if type(puzzle) is ep.EightPuzzle:
+            self.aStar(puzzle, maxNodes)  # print aStar solution
 
     # The heuristic function
     def f(self, puzzle):
@@ -88,7 +89,6 @@ class AStar:
                 elif len(open) + closed.__len__() > maxNodes:
                     error("Max nodes exceeded")
                     break
-
 
 if __name__ == '__main__':
     error("Please run from 'main.py'")
