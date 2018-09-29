@@ -1,5 +1,0 @@
-file commands_test.txt
-file astar_test.txt
-file beam_test.txt
-file ep_test.txt
-file ttt_test.txt
